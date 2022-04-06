@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+
+@using (Html.BeginForm("Register", "Home", FormMethod.Post))
+{
+    <p>
+        <input type="text" placeholder="Nombre" name="nombre"  />
+    </p>
+    <p>
+        <input type="text" placeholder="Apellido" name="apellido"  />
+    </p>
+    <p>
+        <input type="date" placeholder="Edad" name="edad"  />
+    </p>
+    <p>
+        <input type="email" placeholder="Email" name="email"  />
+    </p>
+    <p>
+        <input type="password" placeholder="Password" name="password"  />
+    </p>
+    <p>
+        <input type="file" name="file" />
+    </p>
+    <p>
+        <input type="submit" value="Enviar" />
+    </p>
+
+}
