@@ -7,15 +7,12 @@ using System.Web.Mvc;
 using System.IO;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
 
 namespace Registro.Controllers
 {
 
-    /*
-     ViewData y ViewBag me sirve para enviar informacion a la vista que no tenga que ver con el modelo que se esta utilizando
-     Una vista si o si necesita un accion
-    El _layoutpage es una pagina index, en la carpeta shared que contiene recursos compartidos que puede utilizar cualquier vista
-     */
     public class HomeController : Controller
     {
         private DatabaseService dbservice;
@@ -30,7 +27,7 @@ namespace Registro.Controllers
 
         public JsonResult GetUser(string nombre)
         {
-            List<Usuario> resultado = this.dbservice.ObtenerUsuariosByName(nombre);
+            List<UsuarioDB> resultado = this.dbservice.ObtenerUsuariosByName(nombre);
 
             return Json(resultado, JsonRequestBehavior.AllowGet);
         }
@@ -42,61 +39,62 @@ namespace Registro.Controllers
         }
 
         [HttpGet]
-        public ActionResult Logged(Usuario u)
+        public ActionResult Logged(UsuarioDB u)
         {
-
+            ViewBag.Image = "data:image/jpg;base64," + GetUserPicture(u.Email);
             return View(u);
         }
 
-        public string GetPicture(string id)
+        public string GetUserPicture(string email)
         {
-            ObjectId parsedId = ObjectId.Parse(id);
             this.dbservice = new DatabaseService();
-            byte[] obtainedPicture = this.dbservice.GetProfilePicture(parsedId);
-            return Convert.ToBase64String(obtainedPicture);
-            //return File(obtainedPicture, "image/jpg");
+            UsuarioDB user = this.dbservice.ObtenerUsuarioByEmail(email);
+            
+            if (user == null)
+                return null;
+
+            byte[] obtainedPicture = System.IO.File.ReadAllBytes(user.ProfilePictureServerPath);
+
+            return Convert.ToBase64String(obtainedPicture, 0, obtainedPicture.Length);
         }
 
         [HttpPost]
         public RedirectToRouteResult Register(Usuario u)
         {
-            //if (!ModelState.IsValid)
-            //    return View();
 
-            Usuario nuevo = new Usuario("Nicolas", "Farum", "02/02/2022", "cacaculo@gmail.com", "mipass2", "");
-
+            string path = String.Empty;
             this.dbservice = new DatabaseService();
 
-            Stream fileUploaded = this.Request.InputStream;
-            
-            if (fileUploaded != null)
+            if (u.Photo != null)
             {
                 try
                 {
-                    string fileName = this.Request.Params.Get("file");
-                    nuevo.ProfilePictureId = this.dbservice.SaveFile(fileUploaded, fileName).ToString();
+                    DirectoryInfo info = new DirectoryInfo("C:\\Users\\Nico\\Desktop\\Server");
+                    if (!info.Exists)
+                    {
+                        info.Create();
+                    }
+
+                    string fileName = u.Photo.FileName;
+                    
+                    path = Path.Combine("C:\\Users\\Nico\\Desktop\\Server", fileName);
+                    
+                    if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+
+                    u.Photo.SaveAs(path);
+                    
                 } catch (Exception e)
                 {
-                    nuevo.ProfilePictureId = MongoDB.Bson.ObjectId.Empty.ToString();
                 }
             }
-               
+            UsuarioDB nuevo = new UsuarioDB(u.Nombre, u.Apellido, u.Edad, u.Email, u.Password, path);
             this.dbservice.AddUser(nuevo);
 
             return RedirectToAction("Logged", "Home", nuevo);
         }
-
-
-
-        //public ActionResult ListUsers()
-        //{
-        //    this.db = new MDatabase("prueba");
-        //    List<Usuario> usuarios = this.db.ObtenerUsuarios();
-
-        //    Console.WriteLine("Obtenidos los usuarios");
-
-        //    return View(new ResultadoUsuarios(usuarios));
-        //}
 
         public ActionResult About()
         {

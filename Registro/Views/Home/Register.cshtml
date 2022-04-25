@@ -4,8 +4,7 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-
-@using (Html.BeginForm("Register", "Home", FormMethod.Post))
+@using (Html.BeginForm("Register", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <p>
         <input type="text" placeholder="Nombre" name="nombre"  />
@@ -23,7 +22,7 @@
         <input type="password" placeholder="Password" name="password"  />
     </p>
     <p>
-        <input type="file" name="file" />
+        <input type="file" name="photo" />
     </p>
     <p>
         <input type="submit" value="Enviar" />

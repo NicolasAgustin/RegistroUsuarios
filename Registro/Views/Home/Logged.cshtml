@@ -1,4 +1,4 @@
-﻿@model Registro.Models.Usuario
+﻿@model Registro.Models.UsuarioDB
 
 @{
     ViewBag.Title = "Logged";
@@ -51,9 +51,7 @@
             @Html.DisplayFor(model => model.Password)
         </dd>
         <dd>
-            @*TODO:
-                - Agregar casteo de la imagen obtenida del backend para mostrarla con html*@
-            <img src="@Url.Action("GetPicture", "Home", new { id = Model.ProfilePictureId})" />
+            <img src="@ViewBag.Image" style="height:100px;width:100px" />
         </dd>
     </dl>
 </div>

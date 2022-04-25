@@ -17,12 +17,17 @@ namespace Registro.Models
             this.db = new MDatabase("prueba");
         }
 
-        public List<Usuario> ObtenerUsuariosByName(string nombre)
+        public List<UsuarioDB> ObtenerUsuariosByName(string nombre)
         {
             return this.db.GetUsersByName(nombre);
         }
 
-        public void AddUser(Usuario u)
+        public UsuarioDB ObtenerUsuarioByEmail(string email)
+        {
+            return this.db.GetUserByEmail(email);
+        }
+
+        public void AddUser(UsuarioDB u)
         {
             this.db.AddUser(u);
         }

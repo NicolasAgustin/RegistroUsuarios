@@ -51,32 +51,45 @@ namespace Registro.Models
             return picture;
         }
 
-        public void AddUser(Usuario u)
+        public void AddUser(UsuarioDB u)
         {
-            IMongoCollection<Usuario> usuarios = dbInstance.GetCollection<Usuario>("usuarios");
+            IMongoCollection<UsuarioDB> usuarios = dbInstance.GetCollection<UsuarioDB>("usuarios");
             usuarios.InsertOne(u);
         }
 
-        public List<Usuario> GetUser()
+        public List<UsuarioDB> GetUser()
         {
             if (this.dbInstance == null)
                 return null;
 
-            IMongoCollection<Usuario> usuarios = this.dbInstance.GetCollection<Usuario>("usuarios");
+            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
 
-            List<Usuario> result = usuarios.Find(_ => true).ToList();
+            List<UsuarioDB> result = usuarios.Find(_ => true).ToList();
 
             return result;
         }
 
-        public List<Usuario> GetUsersByName(string nombre)
+        public UsuarioDB GetUserByEmail(string email)
         {
             if (this.dbInstance == null)
                 return null;
 
-            IMongoCollection<Usuario> usuarios = this.dbInstance.GetCollection<Usuario>("usuarios");
+            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
 
-            List<Usuario> result = usuarios.Find(obj => obj.Nombre.ToLower() == nombre.ToLower()).ToList();
+            UsuarioDB user = usuarios.Find(obj => obj.Email.ToLower() == email.ToLower()).FirstOrDefault();
+
+            return user;
+
+        }
+
+        public List<UsuarioDB> GetUsersByName(string nombre)
+        {
+            if (this.dbInstance == null)
+                return null;
+
+            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
+
+            List<UsuarioDB> result = usuarios.Find(obj => obj.Nombre.ToLower() == nombre.ToLower()).ToList();
 
             return result;
 
