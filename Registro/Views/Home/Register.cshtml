@@ -1,31 +1,85 @@
 ﻿@{
     ViewBag.Title = "Register";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+@*<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>*@
 
-@using (Html.BeginForm("Register", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <p>
-        <input type="text" placeholder="Nombre" name="nombre"  />
-    </p>
-    <p>
-        <input type="text" placeholder="Apellido" name="apellido"  />
-    </p>
-    <p>
-        <input type="date" placeholder="Edad" name="edad"  />
-    </p>
-    <p>
-        <input type="email" placeholder="Email" name="email"  />
-    </p>
-    <p>
-        <input type="password" placeholder="Password" name="password"  />
-    </p>
-    <p>
-        <input type="file" name="photo" />
-    </p>
-    <p>
-        <input type="submit" value="Enviar" />
-    </p>
+<div class="box">
+    @using (Html.BeginForm("Register", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
 
-}
+        <span class="text-center">Registro</span>
+        <div class="input-container">
+            <input type="text" required="" name="nombre" />
+            <label>Nombre</label>
+        </div>
+
+
+        <div class="input-container">
+            <input type="email" required="" name="apellido" />
+            <label>Apellido</label>
+        </div>
+
+        <div class="input-container">
+            <input type="date" required="" name="edad" />
+            <label>Edad</label>
+        </div>
+
+        <div class="input-container">
+            <input type="email" required="" />
+            <label>Email</label>
+        </div>
+
+        <div class="input-container">
+            <input type="password" required="" name="password" />
+            <label>Contraseña</label>
+        </div>
+
+        <div class="go-btn">
+            <div class="file-input">
+                <input type="file" id="file" class="file" name="photo" required>
+                <label for="file">Seleccionar foto de perfil</label>
+            </div>
+        </div>
+
+        <div class="go-btn">
+            <button type="button" class="btn">Go!</button>
+        </div>
+
+        @*<div class="txtbox">
+                <input type="text" class="effect-16" placeholder="" name="nombre" />
+                <span class="focus-border"></span>
+                <label>Nombre</label>
+            </div>*@
+        <!--<div class="txtbox">
+            <input type="text" class="effect-16" placeholder="" name="apellido" />
+            <span class="focus-border"></span>
+            <label>Apellido</label>
+        </div>
+        <div class="txtbox">
+            <input type="date" class="effect-16" placeholder="" name="edad" />
+            <span class="focus-border"></span>
+            <label>Edad</label>
+        </div>
+        <div class="txtbox">
+            <input type="text" class="effect-16" placeholder="" name="email" />
+            <span class="focus-border"></span>
+            <label>Email</label>
+        </div>
+        <div class="txtbox">
+            <input type="password" class="effect-16" placeholder="" name="password" />
+            <span class="focus-border"></span>
+            <label>Contraseña</label>
+        </div>-->
+        <!-- Photo select -->
+        <!--<div class="txtbox">
+            <input type="file" class="effect-16" placeholder="" name="photo" />
+            <span class="focus-border"></span>
+            <label>Foto de perfil</label>
+        </div>-->
+        <!-- Boton send -->
+        <!--<div class="txtbox">
+            <input type="submit" class="effect-16" value="Register" />
+        </div>-->
+    }
+</div>

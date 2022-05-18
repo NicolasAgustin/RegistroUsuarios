@@ -78,3 +78,163 @@ textarea {
     text-align: center;
     clear: both;
 }
+
+.effect-16 {
+    border: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid #B22727;
+    background-color: transparent;
+}
+
+.effect-16 ~ .focus-border {
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #4caf50;
+    transition: 0.4s;
+}
+
+.effect-16:focus ~ .focus-border,
+.has-content.effect-16 ~ .focus-border {
+    width: 100%;
+    transition: 0.4s;
+}
+
+    .effect-16 ~ label {
+        left: 0;
+        width: 100%;
+        top: 9px;
+        color: #B22727;
+        transition: 0.3s;
+        z-index: -1;
+        letter-spacing: 0.5px;
+    }
+
+.effect-16:focus ~ label, .has-content.effect-16 ~ label {
+    top: -16px;
+    font-size: 12px;
+    color: #4caf50;
+    transition: 0.3s;
+}
+
+.txtbox {
+    height: auto;
+}
+
+.register-form {
+    justify-content: center;
+}
+
+.box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background-color: rgba(69, 3, 17, 0.89);
+    border-radius: 3px;
+    padding: 70px 100px;
+}
+
+.text-center {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 23px;
+    margin: -50px 0 80px 0;
+    display: block;
+    text-align: center;
+}
+
+.input-container label {
+    top: 0px;
+    left: 0px;
+    font-size: 16px;
+    color: #ff6a3f;
+    pointer-event: none;
+    transition: all 0.5s ease-in-out;
+}
+
+.input-container input {
+    border: 0;
+    border-bottom: 1px solid #555;
+    background: transparent;
+    width: 100%;
+    padding: 8px 0 5px 0;
+    font-size: 16px;
+    color: #fff;
+}
+
+.input-container input:focus {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #e74c3c;
+}
+
+.input-container input:focus ~ label,
+.input-container input:valid ~ label {
+    top: -12px;
+    font-size: 12px;
+}
+
+.go-btn {
+    width: 250px;
+    height: auto;
+    align-content: center;
+    justify-content: center;
+    margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.btn {
+    color: #fff;
+    background-color: #e74c3c;
+    outline: none;
+    border: 0;
+    color: #fff;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 250px;
+    position: center;
+    margin-top: 10px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.file {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+}
+
+.file-input label {
+    display: block;
+    position: relative;
+    width: 150px;
+    height: 25px;
+    border-radius: 25px;
+    background-color: #e74c3c;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    transition: transform .2s ease-out;
+}
