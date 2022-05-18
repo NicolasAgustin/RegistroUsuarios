@@ -20,6 +20,8 @@ namespace Registro.Controllers
         {
             return View("Prueba");
         }
+        // Pagina home
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
@@ -36,7 +38,42 @@ namespace Registro.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public ActionResult Login()
+        {
+            // El tempdata se mantiene hacia la siguiente request, por lo que si no es null, una request de login anterior tuvo lugar
+            if (TempData["error"] is null)
+            {
+                ViewData["error"] = false;
+            } else
+            {
+                // En caso de no ser null, trae un error de un intento de login anterior
+                // Cargamos el viewdata para esta view especifica
+                ViewData["error"] = TempData["error"];
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login(Usuario u)
+        {
 
+            this.dbservice = new DatabaseService();
+            UsuarioDB auth = this.dbservice.ObtenerUsuarioByEmail(u.Email);
+            if (auth is null) {
+                TempData["error"] = true;
+                return RedirectToAction("Login", "Home");
+            }
+
+            if (u.Password == auth.Password)
+            {
+                TempData["error"] = false;
+                return RedirectToAction("Logged", "Home", auth);
+            }
+
+            TempData["error"] = true;
+            return RedirectToAction("Login", "Home");
+
+        }
         [HttpGet]
         public ActionResult Logged(UsuarioDB u)
         {

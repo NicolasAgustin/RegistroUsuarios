@@ -209,6 +209,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\LoginStatus.cs" />
     <Compile Include="Models\DatabaseService.cs" />
     <Compile Include="Models\ProfilePicture.cs" />
     <Compile Include="Models\ResultadoUsuarios.cs" />
@@ -266,6 +267,7 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\Prueba.cshtml" />
     <Content Include="Views\Home\Logged.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

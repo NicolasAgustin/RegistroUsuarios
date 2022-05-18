@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    <div class="go-btn">
+        <button type="submit" class="btn">Back</button>
+    </div>
+}
+
+<div class="box">
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <span class="text-center">Login</span>
+
+        <div class="input-container">
+            <input type="email" required=""  name="email"/>
+            <label>Email</label>
+        </div>
+
+        <div class="input-container">
+            <input type="password" required="" name="password" />
+            <label>Password</label>
+        </div>
+
+        bool error = (bool)ViewData["error"];
+
+        if (error) {
+            <div class="errormsg">
+                <p class="error">Login error. Check the email or password and try again.</p>
+            </div>
+        }
+
+        <div class="go-btn">
+            <button type="submit" class="btn">Go!</button>
+        </div>
+    }
+</div>
