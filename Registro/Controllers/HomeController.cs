@@ -31,7 +31,6 @@ namespace Registro.Controllers
 
             return Json(resultado, JsonRequestBehavior.AllowGet);
         }
-
         [HttpGet]
         public ActionResult Register()
         {

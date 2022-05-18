@@ -1,24 +1,80 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 20px;
     padding-bottom: 20px;
+    background-image: url('fondo.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 /* Set padding to keep content from hitting the edges */
-.body-content {
+/*.body-content {
     padding-left: 15px;
     padding-right: 15px;
-}
+}*/
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
-.dl-horizontal dt {
+/*.dl-horizontal dt {
     white-space: normal;
-}
+}*/
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.head {
+    vertical-align: central;
+    left: 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn1,
+.btn2 {
+    display: inline;
+    margin: 10px;
+    /*padding-top: 10px;*/
+}
+
+.btns-pos {
+    display: flex; 
+}
+
+.form-btn {
+    border: 2px groove #653316;
+    border-radius: 7px;
+    background-color: #EC994B;
+    color: white;
+    height: 50px;
+    font-size: 18px;
+    width: 110px
+}
+
+.home-cnt {
+    padding-top: 150px;
+}
+
+.content {
+    text-align: center;
+    font-size: 35px;
+}
+
+.title {
+    /*margin: 5px;*/
+    margin-left: 10px;
+    /*padding: 5px;*/
+}
+
+.home-title {
+    height: auto;
+    width: auto;
+}
+
+.footer{
+    text-align: center;
+    clear: both;
 }
