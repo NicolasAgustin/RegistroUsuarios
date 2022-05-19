@@ -40,6 +40,7 @@ namespace Registro.Models
     [BsonIgnoreExtraElements]
     public class UsuarioDB
     {
+        public ObjectId _id { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Edad { get; set; }
@@ -70,4 +71,12 @@ namespace Registro.Models
 
     }
 
+    [Serializable]
+    public class UserProfileSessionData
+    {
+        public ObjectId UserId { get; set; }
+        public string EmailAddress { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
+    }
 }

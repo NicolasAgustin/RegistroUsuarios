@@ -17,6 +17,11 @@ namespace Registro.Models
             this.db = new MDatabase("prueba");
         }
 
+        public List<Tarea> ObtenerTareasByAsignee(ObjectId id)
+        {
+            return null;
+        }
+
         public List<UsuarioDB> ObtenerUsuariosByName(string nombre)
         {
             return this.db.GetUsersByName(nombre);
@@ -27,9 +32,14 @@ namespace Registro.Models
             return this.db.GetUserByEmail(email);
         }
 
-        public void AddUser(UsuarioDB u)
+        public void CreateTarea(Tarea t)
         {
-            this.db.AddUser(u);
+            this.db.CreateTarea(t);
+        }
+
+        public ObjectId AddUser(UsuarioDB u)
+        {
+            return this.db.AddUser(u);
         }
 
         public ObjectId SaveFile(Stream file, string name)

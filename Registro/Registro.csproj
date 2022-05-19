@@ -213,6 +213,8 @@
     <Compile Include="Models\DatabaseService.cs" />
     <Compile Include="Models\ProfilePicture.cs" />
     <Compile Include="Models\ResultadoUsuarios.cs" />
+    <Compile Include="Models\Tarea.cs" />
+    <Compile Include="Models\TaskType.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\MDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -222,6 +224,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\logged.css" />
     <Content Include="Core\Compression\Snappy\lib\win\snappy32.dll" />
     <Content Include="Core\Compression\Snappy\lib\win\snappy64.dll" />
     <Content Include="Core\Compression\Zstandard\lib\win\libzstd.dll" />

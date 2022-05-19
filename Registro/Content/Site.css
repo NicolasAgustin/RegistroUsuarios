@@ -1,6 +1,7 @@
 ﻿body {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    margin-top: 10px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
     background-image: url('fondo.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -270,4 +271,22 @@ input[type="file"] {
 .error {
     color: white;
     width: 300px;
+}
+
+.boxbackground {
+   
+    left: 20%;
+    top: 20%;
+    width: 100%;
+    background-color: rgba(69, 3, 17, 0.89);
+    border-radius: 3px;
+    padding: 70px 100px;
+}
+
+.head-logged{
+    vertical-align: central;
+    height:auto;
+    left: 80px;
+    display: inline !important;
+    justify-content: space-between;
 }

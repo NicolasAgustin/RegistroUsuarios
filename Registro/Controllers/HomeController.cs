@@ -67,6 +67,7 @@ namespace Registro.Controllers
             if (u.Password == auth.Password)
             {
                 TempData["error"] = false;
+                this.Session["UserProfile"] = this.CreateSessionData(auth);
                 return RedirectToAction("Logged", "Home", auth);
             }
 
@@ -74,11 +75,41 @@ namespace Registro.Controllers
             return RedirectToAction("Login", "Home");
 
         }
-        [HttpGet]
-        public ActionResult Logged(UsuarioDB u)
+
+        private UserProfileSessionData CreateSessionData(UsuarioDB u)
         {
-            ViewBag.Image = "data:image/jpg;base64," + GetUserPicture(u.Email);
-            return View(u);
+            UserProfileSessionData sessionData = new UserProfileSessionData
+            {
+                UserId = u._id,
+                EmailAddress = u.Email,
+                Name = u.Nombre,
+                LastName = u.Apellido
+            };
+
+            return sessionData;
+        }
+
+        [HttpGet]
+        public ActionResult Logged()
+        {
+            this.dbservice = new DatabaseService();
+            UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
+            this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateTask(Tarea t)
+        {
+            this.dbservice = new DatabaseService();
+            UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
+            t.Owner = session.UserId;
+            t.Asignee = session.UserId;
+            t.TEstimated = 0.0;
+            t.TTracked = 0.0;
+            t.Type = new TaskType { Title = "task development" };
+            this.dbservice.CreateTarea(t);
+            return View("Logged");
         }
 
         public string GetUserPicture(string email)
@@ -126,8 +157,12 @@ namespace Registro.Controllers
                 {
                 }
             }
+            
             UsuarioDB nuevo = new UsuarioDB(u.Nombre, u.Apellido, u.Edad, u.Email, u.Password, path);
-            this.dbservice.AddUser(nuevo);
+            
+            ObjectId id = this.dbservice.AddUser(nuevo);
+
+            this.Session["UserProfile"] = this.CreateSessionData(nuevo);
 
             return RedirectToAction("Logged", "Home", nuevo);
         }

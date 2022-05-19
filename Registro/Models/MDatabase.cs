@@ -51,10 +51,13 @@ namespace Registro.Models
             return picture;
         }
 
-        public void AddUser(UsuarioDB u)
+        public ObjectId AddUser(UsuarioDB u)
         {
             IMongoCollection<UsuarioDB> usuarios = dbInstance.GetCollection<UsuarioDB>("usuarios");
+            ObjectId _newId = ObjectId.GenerateNewId();
+            u._id = _newId;
             usuarios.InsertOne(u);
+            return _newId;
         }
 
         public List<UsuarioDB> GetUser()
@@ -82,6 +85,26 @@ namespace Registro.Models
 
         }
 
+        public void CreateTarea(Tarea t)
+        {
+            if (this.dbInstance == null)
+                return;
+            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
+
+            ObjectId _newId = ObjectId.GenerateNewId();
+
+            TareaDB _new = new TareaDB(_newId, t);
+
+            tareas.InsertOne(_new);
+        }
+        public List<TareaDB> GetTareasByAsignee(ObjectId id)
+        {
+            if (this.dbInstance == null)
+                return null;
+            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
+            List<TareaDB> result = tareas.Find(doc => doc.Asignee == id).ToList();
+            return result;
+        }
         public List<UsuarioDB> GetUsersByName(string nombre)
         {
             if (this.dbInstance == null)
