@@ -10,11 +10,11 @@ namespace Registro.Models
 {
     public class DatabaseService
     {
-        private MDatabase db;
+        private UsersRepository urepo;
 
         public DatabaseService()
         {
-            this.db = new MDatabase("prueba");
+            this.urepo = new UsersRepository("prueba");
         }
 
         public List<Tarea> ObtenerTareasByAsignee(ObjectId id)
@@ -24,32 +24,35 @@ namespace Registro.Models
 
         public List<UsuarioDB> ObtenerUsuariosByName(string nombre)
         {
-            return this.db.GetUsersByName(nombre);
+            return null;
         }
-
         public UsuarioDB ObtenerUsuarioByEmail(string email)
         {
-            return this.db.GetUserByEmail(email);
+            return this.urepo.GetUserByEmail(email);
+        }
+        public UsuarioDB ObtenerUsuarioByEmailAndPass(string email, string password)
+        {
+            return this.urepo.GetUserDetails(email, password);
         }
 
         public void CreateTarea(Tarea t)
         {
-            this.db.CreateTarea(t);
+            // Falta el repo para las tareas
         }
 
         public ObjectId AddUser(UsuarioDB u)
         {
-            return this.db.AddUser(u);
+            return this.urepo.addUser(u);
         }
 
         public ObjectId SaveFile(Stream file, string name)
         {
-            return this.db.UploadFile(file, name);
+            return ObjectId.Empty;
         }
 
         public byte[] GetProfilePicture(ObjectId id)
         {
-            return this.db.GetProfilePicture(id);
+            return this.urepo.GetProfilePhoto(id);
         }
 
     }

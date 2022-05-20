@@ -10,7 +10,7 @@ using MongoDB.Bson;
 
 namespace Registro.Models
 {
-    public class MDatabase
+    public class MDatabase : IDisposable
     {
         public string ConnectionString { set; get; }
         public string DatabaseName { set; get; }
@@ -42,6 +42,11 @@ namespace Registro.Models
 
         }
 
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+
         public byte[] GetProfilePicture(ObjectId id)
         {
             var collection = this.dbInstance.GetCollection<ProfilePicture>("imagenes.files");
@@ -70,6 +75,20 @@ namespace Registro.Models
             List<UsuarioDB> result = usuarios.Find(_ => true).ToList();
 
             return result;
+        }
+
+        public UsuarioDB GetUserByEmailAndPass(string email, string password)
+        {
+            if (this.dbInstance == null)
+                return null;
+
+            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
+
+            UsuarioDB user = usuarios.Find(obj => obj.Email.ToLower() == email.ToLower()
+                                                  && obj.Password == password).FirstOrDefault();
+
+            return user;
+
         }
 
         public UsuarioDB GetUserByEmail(string email)

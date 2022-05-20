@@ -5,13 +5,13 @@
         </div>
         <div class="btns-pos">
             <div class="btn1">
-                @using (Html.BeginForm("Register", "Home", FormMethod.Get))
+                @using (Html.BeginForm("Register", "Auth", FormMethod.Get))
                 {
                     <button class="form-btn">Register</button>
                 }
             </div>
             <div class="btn2">
-                @using (Html.BeginForm("Login", "Home", FormMethod.Get))
+                @using (Html.BeginForm("Login", "Auth", FormMethod.Get))
                 {
                     <button class="form-btn">Log in</button>
                 }

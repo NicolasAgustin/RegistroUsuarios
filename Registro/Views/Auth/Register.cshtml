@@ -1,8 +1,8 @@
 ﻿@{
     ViewBag.Title = "Register";
 }
-@*<h2>@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>*@
+
+@Scripts.Render("~/Scripts/changeFileLabel.js")
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Get))
 {
@@ -12,7 +12,7 @@
 }
 
 <div class="box">
-    @using (Html.BeginForm("Register", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Register", "Auth", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
 
         <span class="text-center">Register</span>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="input-container">
-            <input type="email" required="" name="email"/>
+            <input type="email" required="" name="email" />
             <label>Email</label>
         </div>
 
@@ -42,10 +42,14 @@
         </div>
 
         <div class="go-btn">
-            <div class="file-input">
-                <input type="file" id="file" class="file" name="photo" required>
-                <label for="file">Upload profile picture</label>
+            <div id="file-container" class="file-input">
+                <input type="file" id="file" class="file" name="photo" onchange="changeLabel()" required>
+                <label id="file-label" for="file">Upload profile picture</label>
             </div>
+        </div>
+
+        <div class="register-text-container">
+            <a href="@Url.Action("Login")">Already have an account? Log in here </a>
         </div>
 
         <div class="go-btn">

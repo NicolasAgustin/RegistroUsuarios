@@ -10,7 +10,7 @@
 }
 
 <div class="box">
-    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
 
         <span class="text-center">Login</span>
@@ -32,6 +32,10 @@
                 <p class="error">Login error. Check the email or password and try again.</p>
             </div>
         }
+
+        <div class="register-text-container">
+            <a href="@Url.Action("Register")">Don't have an account? Register here</a>
+        </div>
 
         <div class="go-btn">
             <button type="submit" class="btn">Go!</button>

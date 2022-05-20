@@ -10,9 +10,14 @@
         <div class="title-menu">
             <h1 class="title-menu">Workspace</h1>
         </div>
-        <div style="margin: 5px; height: 50px">
-            <p class="profile-name">@session.Name @session.LastName</p>
-            <img src="@Session["ProfilePicture"]" alt="profile" class="avatar">
+        <div class="details-container">
+            <div class="details-display">
+                <p class="profile-name">@session.Name @session.LastName</p>
+                <a href="@Url.Action("Logout")">Log out</a>
+            </div>
+            <div >
+                <img src="@Session["ProfilePicture"]" alt="profile" class="avatar">
+            </div>
         </div>
     </div>
 </header>

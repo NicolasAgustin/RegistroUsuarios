@@ -47,8 +47,9 @@ namespace Registro.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string ProfilePictureServerPath { get; set; }
+        public List<Role> Roles { get; set; }
 
-        public UsuarioDB(string nombre, string apellido, string edad, string email, string pass, string path)
+        public UsuarioDB(string nombre, string apellido, string edad, string email, string pass, string path, List<Role> roles)
         {
             this.Nombre = nombre;
             this.Apellido = apellido;
@@ -56,7 +57,7 @@ namespace Registro.Models
             this.Email = email;
             this.Password = pass;
             this.ProfilePictureServerPath = path;
-
+            this.Roles = roles;
         }
 
         public UsuarioDB()
@@ -67,6 +68,19 @@ namespace Registro.Models
             Email = String.Empty;
             Password = String.Empty;
             ProfilePictureServerPath = String.Empty;
+            this.Roles = null;
+        }
+        public List<Role> getRoles()
+        {
+            return this.Roles;
+        }
+        public void addRole(Role r)
+        {
+            if(this.Roles is null)
+            {
+                this.Roles = new List<Role>();
+            }
+            this.Roles.Add(r);
         }
 
     }
