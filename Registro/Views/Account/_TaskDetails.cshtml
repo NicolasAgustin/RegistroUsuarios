@@ -1,0 +1,51 @@
+﻿@model TareaDB
+@using Registro.Models
+@{
+    ViewBag.Title = "TaskDetails";
+}
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">@Html.DisplayFor(model => model.Description)</h4>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Owner)
+            </dt>
+
+            <dd>
+                @Html.Action("GetNameById", "Account", new { id = @Model.Owner })
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Asignee)
+            </dt>
+
+            <dd>
+                @Html.Action("GetNameById", "Account", new { id = @Model.Asignee })
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TEstimated)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TEstimated)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TTracked)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TTracked)
+            </dd>
+
+        </dl>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div>

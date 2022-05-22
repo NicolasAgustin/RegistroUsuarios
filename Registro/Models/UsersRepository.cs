@@ -14,12 +14,29 @@ namespace Registro.Models
         {
             this.dbName = dbname;
         }
+        public List<UsuarioDB> GetUsers()
+        {
+            using (MDatabase db = new MDatabase(this.dbName))
+            {
+                return db.GetUser();
+            }
+        }
         public UsuarioDB GetUserDetails(string email, string password)
         {
             UsuarioDB user = new UsuarioDB();
             using (MDatabase db = new MDatabase(this.dbName))
             {
                 user = db.GetUserByEmailAndPass(email, password);
+            }
+            return user;
+        }
+
+        public UsuarioDB GetUserById(ObjectId id)
+        {
+            UsuarioDB user = new UsuarioDB();
+            using (MDatabase db = new MDatabase(this.dbName))
+            {
+                user = db.GetUserById(id);
             }
             return user;
         }

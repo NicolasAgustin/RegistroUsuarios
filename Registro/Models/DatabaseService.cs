@@ -11,15 +11,26 @@ namespace Registro.Models
     public class DatabaseService
     {
         private UsersRepository urepo;
-
+        private TareasRepository trepo;
         public DatabaseService()
         {
             this.urepo = new UsersRepository("prueba");
+            this.trepo = new TareasRepository("prueba");
         }
 
-        public List<Tarea> ObtenerTareasByAsignee(ObjectId id)
+        public List<TareaDB> ObtenerTareasByAsignee(ObjectId id)
         {
-            return null;
+            List<TareaDB> tareas = null;
+            using (MDatabase db = new MDatabase("prueba"))
+            {
+                tareas = db.GetTareasByAsignee(id);
+            }
+            return tareas;
+        }
+
+        public List<UsuarioDB> ObtenerUsuarios()
+        {
+            return this.urepo.GetUsers();
         }
 
         public List<UsuarioDB> ObtenerUsuariosByName(string nombre)
@@ -38,6 +49,12 @@ namespace Registro.Models
         public void CreateTarea(Tarea t)
         {
             // Falta el repo para las tareas
+            this.trepo.CreateTask(t);
+        }
+
+        public UsuarioDB GetUserById(ObjectId id)
+        {
+            return this.urepo.GetUserById(id);
         }
 
         public ObjectId AddUser(UsuarioDB u)

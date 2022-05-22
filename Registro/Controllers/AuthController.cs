@@ -15,33 +15,7 @@ namespace Registro.Controllers
     public class AuthController : Controller
     {
         private DatabaseService dbservice;
-        [HttpGet]
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
-        //[AuthFilter]
-        public ActionResult Logged()
-        {
-            this.dbservice = new DatabaseService();
-            UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
-            if (session is null)
-            {
-                throw new Exception("Sesion nula.");
-            }
-            this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
-            return View();
-        }
-        public string GetUserPicture(string email)
-        {
-            this.dbservice = new DatabaseService();
-            UsuarioDB user = this.dbservice.ObtenerUsuarioByEmail(email);
 
-            if (user == null)
-                return null;
-
-            byte[] obtainedPicture = System.IO.File.ReadAllBytes(user.ProfilePictureServerPath);
-
-            return Convert.ToBase64String(obtainedPicture, 0, obtainedPicture.Length);
-        }
         [HttpGet]
         public ActionResult Login()
         {
@@ -94,14 +68,10 @@ namespace Registro.Controllers
             TempData["error"] = false;
             this.Session["UserProfile"] = this.CreateSessionData(auth);
             //FormsAuthentication.SetAuthCookie(uAuth.EmailAddress, false);
-            return RedirectToAction("Logged", "Auth", auth);
+            return RedirectToAction("Index", "Account", auth);
             
         }
-        public ActionResult Logout()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
-        }
+        
         private UserProfileSessionData CreateSessionData(UsuarioDB u)
         {
             UserProfileSessionData sessionData = new UserProfileSessionData
@@ -131,6 +101,7 @@ namespace Registro.Controllers
             {
                 try
                 {
+                    // Poner este path en configuracion
                     DirectoryInfo info = new DirectoryInfo("C:\\Users\\Nico\\Desktop\\Server");
                     if (!info.Exists)
                     {

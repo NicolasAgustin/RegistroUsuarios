@@ -27,7 +27,11 @@ namespace Registro.Models
             this.dbInstance = Cliente.GetDatabase(database);
             this.bucket = new GridFSBucket(this.dbInstance, new GridFSBucketOptions { BucketName = "imagenes"});
         }
-
+        public UsuarioDB GetUserById(ObjectId id)
+        {
+            IMongoCollection<UsuarioDB> usuarios = dbInstance.GetCollection<UsuarioDB>("usuarios");
+            return usuarios.Find(usr => usr._id == id).FirstOrDefault();
+        }
         public ObjectId UploadFile(Stream file, string filename)
         {
             try
@@ -104,10 +108,10 @@ namespace Registro.Models
 
         }
 
-        public void CreateTarea(Tarea t)
+        public ObjectId CreateTarea(Tarea t)
         {
             if (this.dbInstance == null)
-                return;
+                return ObjectId.Empty;
             IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
 
             ObjectId _newId = ObjectId.GenerateNewId();
@@ -115,6 +119,8 @@ namespace Registro.Models
             TareaDB _new = new TareaDB(_newId, t);
 
             tareas.InsertOne(_new);
+
+            return _newId;
         }
         public List<TareaDB> GetTareasByAsignee(ObjectId id)
         {

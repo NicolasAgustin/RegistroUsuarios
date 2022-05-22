@@ -228,6 +228,7 @@
     <Compile Include="Models\ResultadoUsuarios.cs" />
     <Compile Include="Models\Rol.cs" />
     <Compile Include="Models\Tarea.cs" />
+    <Compile Include="Models\TareasRepository.cs" />
     <Compile Include="Models\TaskType.cs" />
     <Compile Include="Models\UsersRepository.cs" />
     <Compile Include="Models\Usuario.cs" />
@@ -267,7 +268,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\changeFileLabel.js" />
+    <Content Include="Scripts\modal.js" />
+    <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -289,24 +291,22 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ListUsers.cshtml" />
     <Content Include="Views\Auth\Register.cshtml" />
-    <Content Include="Views\Home\Prueba.cshtml" />
-    <Content Include="Views\Auth\Logged.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Error\PageNotFoundError.cshtml" />
     <Content Include="Views\Error\UnAuthorizedError.cshtml" />
     <Content Include="Views\Error\InternalServerError.cshtml" />
     <Content Include="Views\Error\GenericError.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\_TaskDetails.cshtml" />
+    <Content Include="Views\Account\_CreateTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\App_LocalResources\" />
     <Folder Include="Log\" />
-    <Folder Include="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
