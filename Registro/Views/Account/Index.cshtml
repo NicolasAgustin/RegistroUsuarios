@@ -53,8 +53,7 @@
         <div id="tcreate">
             @*@using (Html.BeginForm("CreateTask", "Account", FormMethod.Get))
             {*@
-                <input type="text" name="description" />
-                <button type="submit" id="create-task"> send </button>
+                <button type="submit" class="btn" id="create-task">Create new task</button>
             @* } *@
         </div>
 
@@ -73,7 +72,7 @@
                 //
                 <tr style="width: 100%" data-id="@index" name="row" id="task">
                     <td>
-                        @Html.DisplayFor(model => item.Description)
+                        @Html.DisplayFor(model => item.Title)
                     </td>
                     <td>
                         @Html.DisplayFor(model => item.TEstimated)

@@ -130,6 +130,22 @@ namespace Registro.Models
             List<TareaDB> result = tareas.Find(doc => doc.Asignee == id).ToList();
             return result;
         }
+        public List<TareaDB> GetTareasByAsigneeOrOwner(ObjectId id)
+        {
+            if (this.dbInstance == null)
+                return null;
+            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
+            List<TareaDB> result = tareas.Find(doc => doc.Asignee == id || doc.Owner == id).ToList();
+            return result;
+        }
+        public List<TareaDB> GetTareasByOwner(ObjectId id)
+        {
+            if (this.dbInstance == null)
+                return null;
+            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
+            List<TareaDB> result = tareas.Find(doc => doc.Owner == id).ToList();
+            return result;
+        }
         public List<UsuarioDB> GetUsersByName(string nombre)
         {
             if (this.dbInstance == null)
@@ -143,6 +159,25 @@ namespace Registro.Models
 
         }
 
+        public UsuarioDB GetUserByName(string nombre)
+        {
+            if (this.dbInstance == null)
+                return null;
+
+            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
+
+
+
+            var builder = Builders<UsuarioDB>.Filter;
+            var filter = builder.Eq(doc => doc.Nombre, nombre.Split(' ')[0]) 
+                        & builder.Eq(doc => doc.Apellido, nombre.Split(' ')[1]);
+
+                //.Eq("_id", new ObjectId(accountId));
+
+            UsuarioDB result = usuarios.Find(filter).FirstOrDefault();
+
+            return result;
+        }
 
     }
 

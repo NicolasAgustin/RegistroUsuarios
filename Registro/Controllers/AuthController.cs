@@ -147,7 +147,7 @@ namespace Registro.Controllers
             var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
             HttpContext.Response.Cookies.Add(authCookie);
 
-            return RedirectToAction("Logged", "Auth", nuevo);
+            return RedirectToAction("Index", "Account", nuevo);
         }
     }
 }

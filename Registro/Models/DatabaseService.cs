@@ -27,15 +27,34 @@ namespace Registro.Models
             }
             return tareas;
         }
+        public List<TareaDB> ObtenerTareasByOwner(ObjectId id)
+        {
+            List<TareaDB> tareas = null;
+            using (MDatabase db = new MDatabase("prueba"))
+            {
+                tareas = db.GetTareasByOwner(id);
+            }
+            return tareas;
+        }
+        public List<TareaDB> ObtenerTareasByAsigneeOrOwner(ObjectId id)
+        {
+            List<TareaDB> tareas = null;
+            using (MDatabase db = new MDatabase("prueba"))
+            {
+                tareas = db.GetTareasByAsigneeOrOwner(id);
+            }
+            return tareas;
+        }
+
 
         public List<UsuarioDB> ObtenerUsuarios()
         {
             return this.urepo.GetUsers();
         }
 
-        public List<UsuarioDB> ObtenerUsuariosByName(string nombre)
+        public UsuarioDB ObtenerUsuariosByName(string nombre)
         {
-            return null;
+            return this.urepo.GetUserByName(nombre);
         }
         public UsuarioDB ObtenerUsuarioByEmail(string email)
         {

@@ -40,6 +40,15 @@ namespace Registro.Models
             }
             return user;
         }
+        public UsuarioDB GetUserByName(string name)
+        {
+            UsuarioDB user = new UsuarioDB();
+            using (MDatabase db = new MDatabase(this.dbName))
+            {
+                user = db.GetUserByName(name);
+            }
+            return user;
+        }
         public UsuarioDB GetUserByEmail(string email)
         {
             UsuarioDB user = new UsuarioDB();

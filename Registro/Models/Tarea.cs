@@ -10,6 +10,7 @@ namespace Registro.Models
     {
         public ObjectId Owner { set; get; }
         public ObjectId Asignee { set; get; }
+        public string Title { set; get; }
         public string Description { set; get; }
         public double TEstimated { set; get; }
         public double TTracked { set; get; }
@@ -25,11 +26,12 @@ namespace Registro.Models
             Type = null;
         }
 
-        public Tarea(ObjectId owner, ObjectId asignee, string desc, double estimated, double tracked, TaskType type)
+        public Tarea(ObjectId owner, ObjectId asignee, string desc, string title, double estimated, double tracked, TaskType type)
         {
             Owner = owner;
             Asignee = asignee;
             Description = desc;
+            Title = title;
             TEstimated = estimated;
             TTracked = tracked;
             Type = type;
@@ -40,6 +42,7 @@ namespace Registro.Models
             Owner = tc.Owner;
             Asignee = tc.Asignee;
             Description = tc.Description;
+            Title = tc.Title;
             TEstimated = tc.TEstimated;
             TTracked = tc.TTracked;
             Type = tc.Type;
@@ -54,7 +57,7 @@ namespace Registro.Models
         {
             _id = ObjectId.Empty;
         }
-        public TareaDB(ObjectId _id, ObjectId owner, ObjectId asignee, string desc, double estimated, double tracked, TaskType type) : base(owner, asignee, desc, estimated, tracked, type)
+        public TareaDB(ObjectId _id, ObjectId owner, ObjectId asignee, string desc, string title, double estimated, double tracked, TaskType type) : base(owner, asignee, desc, title, estimated, tracked, type)
         {
             this._id = _id;
         }
@@ -64,4 +67,13 @@ namespace Registro.Models
         }
     } 
 
+    public class TareaForm
+    {
+        public string Asignee { set; get; }
+        public string Title { set; get; }
+        public string Description { set; get; }
+        public double TEstimated { set; get; }
+        public double TTracked { set; get; }
+        public string Type { set; get; }
+    }
 }

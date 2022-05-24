@@ -25,8 +25,14 @@ namespace Registro.Controllers
                 throw new Exception("Sesion nula.");
             }
             this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
-            List<TareaDB> tareas = dbservice.ObtenerTareasByAsignee(session.UserId);
-            this.Session["Tasks"] = tareas;
+
+            IEqualityComparer<UsuarioDB> customComparer =
+                   new PropertyComparer<UsuarioDB>("_id");
+
+            List<TareaDB> tareas = dbservice.ObtenerTareasByAsigneeOrOwner(session.UserId);
+            //List<TareaDB> tareasOwner = dbservice.ObtenerTareasByOwner(session.UserId);
+            //List<TareaDB> joinedTasksList = tareas.Concat(tareasOwner).ToList();
+            this.Session["Tasks"] = tareas;//joinedTasksList.GroupBy(doc => doc._id).Select(x => x.First()).ToList();
             return View(tareas);
         }
         [HttpGet]
@@ -91,16 +97,22 @@ namespace Registro.Controllers
         [Authorize]
         [AuthorizeRole(Role.USER, Role.ADMIN)]
         [HttpPost]
-        public ActionResult CreateTask(Tarea t)
+        public ActionResult CreateTask(TareaForm t)
         { 
             DatabaseService dbservice = new DatabaseService();
             UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
-            t.Owner = session.UserId;
-            t.Asignee = session.UserId;
-            t.TEstimated = 0.0;
-            t.TTracked = 0.0;
-            t.Type = new TaskType { Title = "task development" };
-            dbservice.CreateTarea(t);
+
+            Tarea newTarea = new Tarea();
+
+            newTarea.Owner = session.UserId;
+            UsuarioDB user = dbservice.ObtenerUsuariosByName(t.Asignee);
+            newTarea.Asignee = user._id;
+            newTarea.TEstimated = t.TEstimated;
+            newTarea.TTracked = 0.0;
+            newTarea.Description = t.Description;
+            newTarea.Title = t.Title;
+            //t.Type = new TaskType { Title = t.Type };
+            dbservice.CreateTarea(newTarea);
             return RedirectToAction("Index");
         }
         [Authorize]
