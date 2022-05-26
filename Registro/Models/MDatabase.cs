@@ -166,8 +166,6 @@ namespace Registro.Models
 
             IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
 
-
-
             var builder = Builders<UsuarioDB>.Filter;
             var filter = builder.Eq(doc => doc.Nombre, nombre.Split(' ')[0]) 
                         & builder.Eq(doc => doc.Apellido, nombre.Split(' ')[1]);
@@ -177,6 +175,45 @@ namespace Registro.Models
             UsuarioDB result = usuarios.Find(filter).FirstOrDefault();
 
             return result;
+        }
+
+        public List<TaskType> GetTypesByCreator(ObjectId creator)
+        {
+            if (this.dbInstance == null)
+                return null;
+
+            IMongoCollection<TaskType> tipos = this.dbInstance.GetCollection<TaskType>("task-types");
+
+            List<TaskType> result = tipos.Find(doc => doc._id == creator).ToList();
+
+            return result;
+        }
+
+        public List<TaskType> GetAllTypes()
+        {
+            if (this.dbInstance == null)
+                return null;
+
+            IMongoCollection<TaskType> tipos = this.dbInstance.GetCollection<TaskType>("task-types");
+
+            List<TaskType> result = tipos.Find(_ => true).ToList();
+
+            return result;
+        }
+
+        public ObjectId CreateNewType(TaskType newType)
+        {
+            if (this.dbInstance == null)
+                return ObjectId.Empty;
+
+            if (newType._id == ObjectId.Empty)
+                newType._id = ObjectId.GenerateNewId();
+
+            IMongoCollection<TaskType> tipos = this.dbInstance.GetCollection<TaskType>("task-types");
+
+            tipos.InsertOne(newType);
+
+            return newType._id;
         }
 
     }

@@ -231,6 +231,7 @@
     <Compile Include="Models\Tarea.cs" />
     <Compile Include="Models\TareasRepository.cs" />
     <Compile Include="Models\TaskType.cs" />
+    <Compile Include="Models\TypesRepository.cs" />
     <Compile Include="Models\UsersRepository.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\MDatabase.cs" />
@@ -247,6 +248,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\CreateTask.css" />
+    <Content Include="Content\CreateTaskForm.css" />
     <Content Include="Content\logged.css" />
     <Content Include="Content\login.css" />
     <Content Include="Core\Compression\Snappy\lib\win\snappy32.dll" />

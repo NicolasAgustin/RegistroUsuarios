@@ -20,19 +20,26 @@ namespace Registro.Controllers
         {
             DatabaseService dbservice = new DatabaseService();
             UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
+
+            dbservice.CreateType(new TaskType { 
+                Creator = session.UserId, 
+                Description = "Tipo para pruebas",
+                Title = "Prueba1"
+            });
+
+            dbservice.CreateType(new TaskType {
+                Creator = session.UserId,
+                Description = "Tipo para pruebas",
+                Title = "Prueba2"
+            });
+
             if (session is null)
-            {
                 throw new Exception("Sesion nula.");
-            }
+
             this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
 
-            IEqualityComparer<UsuarioDB> customComparer =
-                   new PropertyComparer<UsuarioDB>("_id");
-
             List<TareaDB> tareas = dbservice.ObtenerTareasByAsigneeOrOwner(session.UserId);
-            //List<TareaDB> tareasOwner = dbservice.ObtenerTareasByOwner(session.UserId);
-            //List<TareaDB> joinedTasksList = tareas.Concat(tareasOwner).ToList();
-            this.Session["Tasks"] = tareas;//joinedTasksList.GroupBy(doc => doc._id).Select(x => x.First()).ToList();
+            this.Session["Tasks"] = tareas;
             return View(tareas);
         }
         [HttpGet]
@@ -85,13 +92,22 @@ namespace Registro.Controllers
         public ActionResult CreateTask()
         {
             DatabaseService dbservice = new DatabaseService();
+            List<TaskType> tiposDisponibles = dbservice.ObtenerTiposTareas();
             List<UsuarioDB> users = dbservice.ObtenerUsuarios();
-            List<String> asigneesNames = new List<String>();
+            List<string> asigneesNames = new List<string>();
+            List<string> types = new List<string>();
             foreach (UsuarioDB usr in users)
             {
                 asigneesNames.Add(usr.Nombre + " " + usr.Apellido);
             }
+
+            foreach (TaskType t in tiposDisponibles)
+            {
+                types.Add(t.Title);
+            }
+
             ViewBag.data = asigneesNames;
+            ViewBag.tipos = types;
             return PartialView("_CreateTask");
         }
         [Authorize]
@@ -115,6 +131,14 @@ namespace Registro.Controllers
             dbservice.CreateTarea(newTarea);
             return RedirectToAction("Index");
         }
+        [Authorize]
+        [AuthorizeRole(Role.USER, Role.ADMIN)]
+        public List<TaskType> GetTaskTypes()
+        {
+            DatabaseService dbservice = new DatabaseService();
+            return dbservice.ObtenerTiposTareas();
+        }
+
         [Authorize]
         [AuthorizeRole(Role.USER, Role.ADMIN)]
         public List<UsuarioDB> GetUsuarios()

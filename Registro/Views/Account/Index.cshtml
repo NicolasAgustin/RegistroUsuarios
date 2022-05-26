@@ -5,6 +5,10 @@
     ViewBag.Title = "Logged";
     UserProfileSessionData session = (UserProfileSessionData)Session["UserProfile"];
 }
+<head>
+    <link href="@Url.Content("~/Content/logged.css")" rel="stylesheet" type="text/css" />
+</head>
+
 @section scripts {
     <script>
         $("#showtable").on("click", "#task", function () {

@@ -12,10 +12,17 @@ namespace Registro.Models
     {
         private UsersRepository urepo;
         private TareasRepository trepo;
+        private TypesRepository tyrepo;
         public DatabaseService()
         {
             this.urepo = new UsersRepository("prueba");
             this.trepo = new TareasRepository("prueba");
+            this.tyrepo = new TypesRepository("prueba");
+        }
+
+        public ObjectId CreateType(TaskType newType)
+        {
+            return this.tyrepo.CreateType(newType);
         }
 
         public List<TareaDB> ObtenerTareasByAsignee(ObjectId id)
@@ -46,6 +53,10 @@ namespace Registro.Models
             return tareas;
         }
 
+        public List<TaskType> ObtenerTiposTareas()
+        {
+            return this.tyrepo.GetAll();
+        }
 
         public List<UsuarioDB> ObtenerUsuarios()
         {
@@ -67,7 +78,6 @@ namespace Registro.Models
 
         public void CreateTarea(Tarea t)
         {
-            // Falta el repo para las tareas
             this.trepo.CreateTask(t);
         }
 
