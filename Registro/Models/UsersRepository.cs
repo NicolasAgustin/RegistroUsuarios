@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,57 +7,126 @@ using System.Web;
 
 namespace Registro.Models
 {
-    public class UsersRepository
+    public class UsersRepository : Repository<UsuarioDB>
     {
         private MDatabase db;
         private string dbName;
+        private string collName;
         public UsersRepository(string dbname)
         {
             this.dbName = dbname;
+            this.collName = "usuarios";
         }
-        public List<UsuarioDB> GetUsers()
+        public List<UsuarioDB> GetAll()
         {
-            using (MDatabase db = new MDatabase(this.dbName))
+            using (this.db = new MDatabase(this.dbName))
             {
-                return db.GetUser();
-            }
-        }
-        public UsuarioDB GetUserDetails(string email, string password)
-        {
-            UsuarioDB user = new UsuarioDB();
-            using (MDatabase db = new MDatabase(this.dbName))
-            {
-                user = db.GetUserByEmailAndPass(email, password);
-            }
-            return user;
-        }
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+                    List<UsuarioDB> result = collection.Find(_ => true).ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
 
-        public UsuarioDB GetUserById(ObjectId id)
-        {
-            UsuarioDB user = new UsuarioDB();
-            using (MDatabase db = new MDatabase(this.dbName))
-            {
-                user = db.GetUserById(id);
             }
-            return user;
         }
-        public UsuarioDB GetUserByName(string name)
+        public UsuarioDB GetByEmailAndPass(string email, string password)
         {
-            UsuarioDB user = new UsuarioDB();
-            using (MDatabase db = new MDatabase(this.dbName))
+            using (this.db = new MDatabase(this.dbName))
             {
-                user = db.GetUserByName(name);
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+                    UsuarioDB found = collection.Find(obj => obj.Email.ToLower() == email.ToLower()
+                                                             && obj.Password == password
+                                                      ).FirstOrDefault();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
             }
-            return user;
         }
-        public UsuarioDB GetUserByEmail(string email)
+        public UsuarioDB GetById(ObjectId id)
         {
-            UsuarioDB user = new UsuarioDB();
-            using (MDatabase db = new MDatabase(this.dbName))
+            using (this.db = new MDatabase(this.dbName))
             {
-                user = db.GetUserByEmail(email);
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+                    UsuarioDB found = collection.Find(doc => doc._id == id).FirstOrDefault();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+
             }
-            return user;
+        }
+        public UsuarioDB GetByName(string name)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+                    var builder = Builders<UsuarioDB>.Filter;
+                    var filter = builder.Eq(doc => doc.Nombre, name.Split(' ')[0])
+                                & builder.Eq(doc => doc.Apellido, name.Split(' ')[1]);
+                    UsuarioDB found = collection.Find(filter).FirstOrDefault();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+        public List<UsuarioDB> GetByNames(string name)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+                    List<UsuarioDB> result = collection.Find(obj => obj.Nombre.ToLower() == name.ToLower()).ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+        public UsuarioDB GetByEmail(string email)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+
+                    UsuarioDB found = collection.Find(doc => doc.Email == email).FirstOrDefault();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+
+            }
         }
         public byte[] GetProfilePhoto(ObjectId id)
         {
@@ -67,11 +137,26 @@ namespace Registro.Models
             }
             return photo;
         }
-        public ObjectId addUser(UsuarioDB u)
+        public ObjectId Insert(UsuarioDB u)
         {
-            using (MDatabase db = new MDatabase(this.dbName))
+            using (this.db = new MDatabase(this.dbName))
             {
-                return db.AddUser(u);
+                var session = this.db.CreateSession();
+                try
+                {
+                    IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
+                    u._id = ObjectId.GenerateNewId();
+                    collection.InsertOne(u);
+                    session.CommitTransaction();
+                    return u._id;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    session.AbortTransaction();
+                    return default;
+                }
+
             }
         }
     }

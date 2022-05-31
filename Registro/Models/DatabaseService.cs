@@ -13,92 +13,72 @@ namespace Registro.Models
         private UsersRepository urepo;
         private TareasRepository trepo;
         private TypesRepository tyrepo;
+        private GroupsRepository grepo;
+        private string dbName;
         public DatabaseService()
         {
-            this.urepo = new UsersRepository("prueba");
-            this.trepo = new TareasRepository("prueba");
-            this.tyrepo = new TypesRepository("prueba");
+            this.dbName = "prueba";
+            this.urepo = new UsersRepository(this.dbName);
+            this.trepo = new TareasRepository(this.dbName);
+            this.tyrepo = new TypesRepository(this.dbName);
+            this.grepo = new GroupsRepository(this.dbName);
         }
 
         public ObjectId CreateType(TaskType newType)
         {
-            return this.tyrepo.CreateType(newType);
+            return this.tyrepo.Insert(newType);
         }
-
         public List<TareaDB> ObtenerTareasByAsignee(ObjectId id)
         {
-            List<TareaDB> tareas = null;
-            using (MDatabase db = new MDatabase("prueba"))
-            {
-                tareas = db.GetTareasByAsignee(id);
-            }
-            return tareas;
+            return trepo.GetByAsignee(id);
         }
         public List<TareaDB> ObtenerTareasByOwner(ObjectId id)
         {
-            List<TareaDB> tareas = null;
-            using (MDatabase db = new MDatabase("prueba"))
-            {
-                tareas = db.GetTareasByOwner(id);
-            }
-            return tareas;
+            return trepo.GetByOwner(id);
         }
         public List<TareaDB> ObtenerTareasByAsigneeOrOwner(ObjectId id)
         {
-            List<TareaDB> tareas = null;
-            using (MDatabase db = new MDatabase("prueba"))
-            {
-                tareas = db.GetTareasByAsigneeOrOwner(id);
-            }
-            return tareas;
+            return trepo.GetByAsigneeOrOwner(id);
         }
-
         public List<TaskType> ObtenerTiposTareas()
         {
             return this.tyrepo.GetAll();
         }
-
         public List<UsuarioDB> ObtenerUsuarios()
         {
-            return this.urepo.GetUsers();
+            return this.urepo.GetAll();
         }
-
         public UsuarioDB ObtenerUsuariosByName(string nombre)
         {
-            return this.urepo.GetUserByName(nombre);
+            return this.urepo.GetByName(nombre);
         }
         public UsuarioDB ObtenerUsuarioByEmail(string email)
         {
-            return this.urepo.GetUserByEmail(email);
+            return this.urepo.GetByEmail(email);
         }
         public UsuarioDB ObtenerUsuarioByEmailAndPass(string email, string password)
         {
-            return this.urepo.GetUserDetails(email, password);
+            return this.urepo.GetByEmailAndPass(email, password);
         }
-
-        public void CreateTarea(Tarea t)
+        public void CreateTarea(TareaDB t)
         {
-            this.trepo.CreateTask(t);
+            this.trepo.Insert(t);
         }
-
         public UsuarioDB GetUserById(ObjectId id)
         {
-            return this.urepo.GetUserById(id);
+            return this.urepo.GetById(id);
         }
-
         public ObjectId AddUser(UsuarioDB u)
         {
-            return this.urepo.addUser(u);
+            return this.urepo.Insert(u);
         }
-
         public ObjectId SaveFile(Stream file, string name)
         {
             return ObjectId.Empty;
         }
-
-        public byte[] GetProfilePicture(ObjectId id)
+        public ObjectId CreateGroup(Group g)
         {
-            return this.urepo.GetProfilePhoto(id);
+            return grepo.Insert(g);
         }
 
     }

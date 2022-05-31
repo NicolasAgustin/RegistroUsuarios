@@ -20,6 +20,7 @@ namespace Registro
 
             // Agregamos el filtro de errores de forma global
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
+
         }
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {

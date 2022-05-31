@@ -221,6 +221,9 @@
     </Compile>
     <Compile Include="Models\AuthFilter.cs" />
     <Compile Include="Models\AuthorizeRole.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\GroupsRepository.cs" />
+    <Compile Include="Models\ListaTareas.cs" />
     <Compile Include="Models\LoggingFilter.cs" />
     <Compile Include="Models\LoginStatus.cs" />
     <Compile Include="Models\DatabaseService.cs" />
@@ -249,6 +252,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\CreateTask.css" />
     <Content Include="Content\CreateTaskForm.css" />
+    <Content Include="Content\LeftMenu.css" />
     <Content Include="Content\logged.css" />
     <Content Include="Content\login.css" />
     <Content Include="Core\Compression\Snappy\lib\win\snappy32.dll" />
@@ -273,6 +277,7 @@
     </None>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\modal.js" />
+    <Content Include="Scripts\sidemenu.js" />
     <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -306,6 +311,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\_TaskDetails.cshtml" />
     <Content Include="Views\Account\_CreateTask.cshtml" />
+    <Content Include="Views\Account\_LeftMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

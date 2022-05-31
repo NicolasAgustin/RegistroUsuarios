@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,21 +7,34 @@ using System.Web;
 
 namespace Registro.Models
 {
-    public class TypesRepository
+    public class TypesRepository : Repository<TaskType>
     {
         private MDatabase db;
         private string dbName;
+        private string collName;
 
         public TypesRepository(string dbName)
         {
             this.dbName = dbName;
+            this.collName = "task-types";
         }
 
-        public List<TaskType> GetById(ObjectId id)
+        public TaskType GetById(ObjectId id)
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                return this.db.GetTypesByCreator(id);
+                try
+                {
+                    IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
+                    TaskType found = collection.Find(doc => doc._id == id).FirstOrDefault();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+
             }
         }
 
@@ -28,17 +42,61 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                return this.db.GetAllTypes();
+                try
+                {
+                    IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
+                    List<TaskType> found = collection.Find(_ => true).ToList();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+
             }
         }
 
-        public ObjectId CreateType(TaskType newType)
+        public ObjectId Insert(TaskType newType)
         {
-            using(this.db = new MDatabase(this.dbName))
+            using (this.db = new MDatabase(this.dbName))
             {
-                return this.db.CreateNewType(newType);
+                var session = this.db.CreateSession();
+                try 
+                {
+                    IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
+                    newType._id = ObjectId.GenerateNewId();
+                    collection.InsertOne(newType);
+                    session.CommitTransaction();
+                    return newType._id;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    session.AbortTransaction();
+                    return ObjectId.Empty;
+                }
+
             }
         }
 
+        public List<TaskType> GetTypesByCreator(ObjectId creator)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                var session = this.db.CreateSession();
+                try
+                {
+                    IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
+                    List<TaskType> result = collection.Find(doc => creator == doc.Creator).ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
     }
 }

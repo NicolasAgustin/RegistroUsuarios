@@ -7,6 +7,7 @@
 }
 <head>
     <link href="@Url.Content("~/Content/logged.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/LeftMenu.css")" rel="stylesheet" type="text/css" />
 </head>
 
 @section scripts {
@@ -35,6 +36,24 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+
+            $(".sidebar-menu > li.have-children a").on("click", function (i) {
+                i.preventDefault();
+                if (!$(this).parent().hasClass("active")) {
+                    $(".sidebar-menu li ul").slideUp();
+                    $(this).next().slideToggle();
+                    $(".sidebar-menu li").removeClass("active");
+                    $(this).parent().addClass("active");
+                }
+                else {
+                    $(this).next().slideToggle();
+                    $(".sidebar-menu li").removeClass("active");
+                }
+            });
+        });
+    </script>
 }
 <header>
     <div class="head ">
@@ -54,50 +73,102 @@
 </header>
 <content>
     <div class="boxbackground">
-        <div id="tcreate">
-            @*@using (Html.BeginForm("CreateTask", "Account", FormMethod.Get))
-            {*@
+        <ul class="sidebar-menu" style="display:inline-block">
+            <li><span class="nav-section-title"></span></li>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-university"></span>Groups</a>
+                <ul>
+                    <li><a href="#">Join to an existing group</a></li>
+                    <li><a href="#">Create new group</a></li>
+                </ul>
+            </li>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-tags"></span>My Spaces</a>
+                <ul>
+                    <li><a href="#">Add Category</a></li>
+                    <li><a href="#">View Categories</a></li>
+                </ul>
+            </li>
+            @*<li class="have-children">
+                <a href="#"><span class="fa fa-trophy"></span>Award</a>
+                <ul>
+                    <li><a href="#">Add Award</a></li>
+                    <li><a href="#">View Awards</a></li>
+                </ul>
+            </li>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-gavel"></span>Jury</a>
+                <ul>
+                    <li><a href="#">Add Jury</a></li>
+                    <li><a href="#">View Juries</a></li>
+                </ul>
+            </li>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-user-o"></span>Author</a>
+                <ul>
+                    <li><a href="#">Add Author</a></li>
+                    <li><a href="#">View Authors</a></li>
+                </ul>
+            </li>*@
+            @*<li><a href="#"><span class="fa fa-picture-o"></span>Gallery</a></li>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-flag"></span>Reports</a>
+                <ul>
+                    <li><a href="#">View Judging points</a></li>
+                    <li><a href="#">Create Acceptances List</a></li>
+                    <li><a href="#">Create Awarded List</a></li>
+                    <li><a href="#">View Candidates for Awards</a></li>
+                    <li><a href="responsive_table.html">Send Report Cards</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="fa fa-envelope-o"></span>Messages</a></li>
+            <li><a href="#"><span class="fa fa-gear"></span>Configuration</a></li>*@
+        </ul>
+
+
+        <div class="table-container" style="display:inline-block">
+            <div id="tcreate">
+                @*@using (Html.BeginForm("CreateTask", "Account", FormMethod.Get))
+                    {*@
                 <button type="submit" class="btn" id="create-task">Create new task</button>
-            @* } *@
-        </div>
-
-    <div class="table-container">
-        <table class="rwd-table" id="showtable">
-            <tr>
-                <th>Description</th>
-                <th>Estimated time</th>
-                <th>Tracked time</th>
-                <th>Task type</th>
-                <th>Asignee</th>
-            </tr>
-            @foreach (var item in Model)
-            {
-                var index = Model.IndexOf(item);
-                //
-                <tr style="width: 100%" data-id="@index" name="row" id="task">
-                    <td>
-                        @Html.DisplayFor(model => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.TEstimated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.TTracked)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Type.Title)
-                    </td>
-                    <td>
-                        @Html.Action("GetNameById", "Account", new { id = item.Asignee })
-                    </td>
+                @* } *@
+            </div>
+            <table class="rwd-table" id="showtable">
+                <tr>
+                    <th>Description</th>
+                    <th>Estimated time</th>
+                    <th>Tracked time</th>
+                    <th>Task type</th>
+                    <th>Asignee</th>
                 </tr>
-            }
-        </table>
-        <div id="showmodal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+                @foreach (var item in Model)
+                {
+                    var index = Model.IndexOf(item);
+                    //
+                    <tr style="width: 100%" data-id="@index" name="row" id="task">
+                        <td>
+                            @Html.DisplayFor(model => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.TEstimated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.TTracked)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Type.Title)
+                        </td>
+                        <td>
+                            @Html.Action("GetNameById", "Account", new { id = item.Asignee })
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div id="showmodal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
 
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </content>

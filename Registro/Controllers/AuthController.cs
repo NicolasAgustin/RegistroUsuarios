@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 using System.Web.Mvc;
 using MongoDB.Bson;
 using System.Web.Security;
@@ -101,8 +102,8 @@ namespace Registro.Controllers
             {
                 try
                 {
-                    // Poner este path en configuracion
-                    DirectoryInfo info = new DirectoryInfo("C:\\Users\\Nico\\Desktop\\Server");
+                    string serverPath = ConfigurationManager.AppSettings["server_path"];
+                    DirectoryInfo info = new DirectoryInfo(serverPath);
                     if (!info.Exists)
                     {
                         info.Create();
@@ -110,7 +111,7 @@ namespace Registro.Controllers
 
                     string fileName = u.Photo.FileName;
 
-                    path = Path.Combine("C:\\Users\\Nico\\Desktop\\Server", fileName);
+                    path = Path.Combine(serverPath, fileName);
 
                     if (System.IO.File.Exists(path))
                     {

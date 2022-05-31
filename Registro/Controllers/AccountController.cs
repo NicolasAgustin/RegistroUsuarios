@@ -36,7 +36,10 @@ namespace Registro.Controllers
             if (session is null)
                 throw new Exception("Sesion nula.");
 
-            this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
+            if (this.Session["ProfilePicture"] is null)
+            {
+                this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
+            }
 
             List<TareaDB> tareas = dbservice.ObtenerTareasByAsigneeOrOwner(session.UserId);
             this.Session["Tasks"] = tareas;
@@ -118,7 +121,7 @@ namespace Registro.Controllers
             DatabaseService dbservice = new DatabaseService();
             UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
 
-            Tarea newTarea = new Tarea();
+            TareaDB newTarea = new TareaDB();
 
             newTarea.Owner = session.UserId;
             UsuarioDB user = dbservice.ObtenerUsuariosByName(t.Asignee);
@@ -151,5 +154,6 @@ namespace Registro.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Auth");
         }
+
     }
 }

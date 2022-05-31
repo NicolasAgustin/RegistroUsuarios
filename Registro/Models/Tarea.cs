@@ -61,9 +61,9 @@ namespace Registro.Models
         {
             this._id = _id;
         }
-        public TareaDB(ObjectId _id, Tarea tcopy) : base(tcopy)
+        public TareaDB(Tarea tcopy) : base(tcopy)
         {
-            this._id = _id;
+            this._id = ObjectId.Empty;
         }
     } 
 

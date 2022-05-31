@@ -15,7 +15,7 @@ namespace Registro.Models
         public string ConnectionString { set; get; }
         public string DatabaseName { set; get; }
         public MongoClient Cliente { set; get; }
-        private IMongoDatabase dbInstance;
+        public IMongoDatabase dbInstance;
         private GridFSBucket bucket;
 
         public MDatabase(string database)
@@ -27,10 +27,10 @@ namespace Registro.Models
             this.dbInstance = Cliente.GetDatabase(database);
             this.bucket = new GridFSBucket(this.dbInstance, new GridFSBucketOptions { BucketName = "imagenes"});
         }
-        public UsuarioDB GetUserById(ObjectId id)
+
+        public IClientSessionHandle CreateSession()
         {
-            IMongoCollection<UsuarioDB> usuarios = dbInstance.GetCollection<UsuarioDB>("usuarios");
-            return usuarios.Find(usr => usr._id == id).FirstOrDefault();
+            return this.Cliente.StartSession();
         }
         public ObjectId UploadFile(Stream file, string filename)
         {
@@ -59,163 +59,6 @@ namespace Registro.Models
             picture = this.bucket.DownloadAsBytesByName(obtained.filename);
             return picture;
         }
-
-        public ObjectId AddUser(UsuarioDB u)
-        {
-            IMongoCollection<UsuarioDB> usuarios = dbInstance.GetCollection<UsuarioDB>("usuarios");
-            ObjectId _newId = ObjectId.GenerateNewId();
-            u._id = _newId;
-            usuarios.InsertOne(u);
-            return _newId;
-        }
-
-        public List<UsuarioDB> GetUser()
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
-
-            List<UsuarioDB> result = usuarios.Find(_ => true).ToList();
-
-            return result;
-        }
-
-        public UsuarioDB GetUserByEmailAndPass(string email, string password)
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
-
-            UsuarioDB user = usuarios.Find(obj => obj.Email.ToLower() == email.ToLower()
-                                                  && obj.Password == password).FirstOrDefault();
-
-            return user;
-
-        }
-
-        public UsuarioDB GetUserByEmail(string email)
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
-
-            UsuarioDB user = usuarios.Find(obj => obj.Email.ToLower() == email.ToLower()).FirstOrDefault();
-
-            return user;
-
-        }
-
-        public ObjectId CreateTarea(Tarea t)
-        {
-            if (this.dbInstance == null)
-                return ObjectId.Empty;
-            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
-
-            ObjectId _newId = ObjectId.GenerateNewId();
-
-            TareaDB _new = new TareaDB(_newId, t);
-
-            tareas.InsertOne(_new);
-
-            return _newId;
-        }
-        public List<TareaDB> GetTareasByAsignee(ObjectId id)
-        {
-            if (this.dbInstance == null)
-                return null;
-            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
-            List<TareaDB> result = tareas.Find(doc => doc.Asignee == id).ToList();
-            return result;
-        }
-        public List<TareaDB> GetTareasByAsigneeOrOwner(ObjectId id)
-        {
-            if (this.dbInstance == null)
-                return null;
-            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
-            List<TareaDB> result = tareas.Find(doc => doc.Asignee == id || doc.Owner == id).ToList();
-            return result;
-        }
-        public List<TareaDB> GetTareasByOwner(ObjectId id)
-        {
-            if (this.dbInstance == null)
-                return null;
-            IMongoCollection<TareaDB> tareas = this.dbInstance.GetCollection<TareaDB>("tareas");
-            List<TareaDB> result = tareas.Find(doc => doc.Owner == id).ToList();
-            return result;
-        }
-        public List<UsuarioDB> GetUsersByName(string nombre)
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
-
-            List<UsuarioDB> result = usuarios.Find(obj => obj.Nombre.ToLower() == nombre.ToLower()).ToList();
-
-            return result;
-
-        }
-
-        public UsuarioDB GetUserByName(string nombre)
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<UsuarioDB> usuarios = this.dbInstance.GetCollection<UsuarioDB>("usuarios");
-
-            var builder = Builders<UsuarioDB>.Filter;
-            var filter = builder.Eq(doc => doc.Nombre, nombre.Split(' ')[0]) 
-                        & builder.Eq(doc => doc.Apellido, nombre.Split(' ')[1]);
-
-                //.Eq("_id", new ObjectId(accountId));
-
-            UsuarioDB result = usuarios.Find(filter).FirstOrDefault();
-
-            return result;
-        }
-
-        public List<TaskType> GetTypesByCreator(ObjectId creator)
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<TaskType> tipos = this.dbInstance.GetCollection<TaskType>("task-types");
-
-            List<TaskType> result = tipos.Find(doc => doc._id == creator).ToList();
-
-            return result;
-        }
-
-        public List<TaskType> GetAllTypes()
-        {
-            if (this.dbInstance == null)
-                return null;
-
-            IMongoCollection<TaskType> tipos = this.dbInstance.GetCollection<TaskType>("task-types");
-
-            List<TaskType> result = tipos.Find(_ => true).ToList();
-
-            return result;
-        }
-
-        public ObjectId CreateNewType(TaskType newType)
-        {
-            if (this.dbInstance == null)
-                return ObjectId.Empty;
-
-            if (newType._id == ObjectId.Empty)
-                newType._id = ObjectId.GenerateNewId();
-
-            IMongoCollection<TaskType> tipos = this.dbInstance.GetCollection<TaskType>("task-types");
-
-            tipos.InsertOne(newType);
-
-            return newType._id;
-        }
-
     }
 
 }
