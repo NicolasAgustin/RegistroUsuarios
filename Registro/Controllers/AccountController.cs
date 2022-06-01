@@ -21,18 +21,6 @@ namespace Registro.Controllers
             DatabaseService dbservice = new DatabaseService();
             UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
 
-            dbservice.CreateType(new TaskType { 
-                Creator = session.UserId, 
-                Description = "Tipo para pruebas",
-                Title = "Prueba1"
-            });
-
-            dbservice.CreateType(new TaskType {
-                Creator = session.UserId,
-                Description = "Tipo para pruebas",
-                Title = "Prueba2"
-            });
-
             if (session is null)
                 throw new Exception("Sesion nula.");
 

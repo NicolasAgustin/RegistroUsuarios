@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Diagnostics;
 
 namespace Registro.Models
 {
@@ -29,7 +30,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -38,19 +39,20 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                var session = this.db.CreateSession();
+                //var session = this.db.CreateSession();
+                //session.StartTransaction();
                 try
                 {
                     IMongoCollection<TareaDB> collection = this.db.dbInstance.GetCollection<TareaDB>(collName);
                     t._id = ObjectId.GenerateNewId();
                     collection.InsertOne(t);
-                    session.CommitTransaction();
+                    //session.CommitTransaction();
                     return t._id;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    session.AbortTransaction();
+                    Debug.WriteLine(e.Message);
+                    //session.AbortTransaction();
                     return default;
                 }
 
@@ -68,7 +70,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -86,7 +88,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -104,7 +106,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -121,7 +123,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }

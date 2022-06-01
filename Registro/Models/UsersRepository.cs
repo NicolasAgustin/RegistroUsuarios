@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Diagnostics;
 
 namespace Registro.Models
 {
@@ -29,7 +30,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -49,7 +50,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -66,7 +67,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -87,7 +88,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -104,7 +105,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -122,7 +123,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -141,19 +142,20 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                var session = this.db.CreateSession();
+                //var session = this.db.CreateSession();
+                //session.StartTransaction();
                 try
                 {
                     IMongoCollection<UsuarioDB> collection = this.db.dbInstance.GetCollection<UsuarioDB>(collName);
                     u._id = ObjectId.GenerateNewId();
                     collection.InsertOne(u);
-                    session.CommitTransaction();
+                    //session.CommitTransaction();
                     return u._id;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    session.AbortTransaction();
+                    Debug.WriteLine(e.Message);
+                    //session.AbortTransaction();
                     return default;
                 }
 

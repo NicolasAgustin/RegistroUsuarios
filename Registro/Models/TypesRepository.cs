@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Diagnostics;
 
 namespace Registro.Models
 {
@@ -31,7 +32,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -50,7 +51,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
 
@@ -61,19 +62,20 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                var session = this.db.CreateSession();
+                //var session = this.db.CreateSession();
+                //session.StartTransaction();
                 try 
                 {
                     IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
                     newType._id = ObjectId.GenerateNewId();
                     collection.InsertOne(newType);
-                    session.CommitTransaction();
+                    //session.CommitTransaction();
                     return newType._id;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    session.AbortTransaction();
+                    Debug.WriteLine(e.Message);
+                    //session.AbortTransaction();
                     return ObjectId.Empty;
                 }
 
@@ -84,7 +86,6 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                var session = this.db.CreateSession();
                 try
                 {
                     IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
@@ -93,7 +94,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }

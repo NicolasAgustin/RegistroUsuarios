@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MongoDB.Driver;
+using System.Diagnostics;
 
 namespace Registro.Models
 {
@@ -30,7 +31,7 @@ namespace Registro.Models
                     return found;    
                 } catch(Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
                 
@@ -49,7 +50,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -59,18 +60,19 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                var session = this.db.CreateSession();
+                //var session = this.db.CreateSession();
+                //session.StartTransaction();
                 try
                 {
                     IMongoCollection<Group> collection = this.db.dbInstance.GetCollection<Group>(collName);
                     newGroup._id = ObjectId.GenerateNewId();
                     collection.InsertOne(newGroup);
-                    session.CommitTransaction();
+                    //session.CommitTransaction();
                     return newGroup._id;
                 } catch(Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    session.AbortTransaction();
+                    Debug.WriteLine(e.Message);
+                    //session.AbortTransaction();
                     return ObjectId.Empty;
                 }
             }
@@ -91,7 +93,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }
@@ -108,7 +110,7 @@ namespace Registro.Models
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                     return default;
                 }
             }

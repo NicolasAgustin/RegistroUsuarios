@@ -229,6 +229,7 @@
     <Compile Include="Models\DatabaseService.cs" />
     <Compile Include="Models\ProfilePicture.cs" />
     <Compile Include="Models\PropertyComparer.cs" />
+    <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\ResultadoUsuarios.cs" />
     <Compile Include="Models\Rol.cs" />
     <Compile Include="Models\Tarea.cs" />
