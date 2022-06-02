@@ -28,3 +28,15 @@ function modalLoad(i) {
         }
     });
 }
+
+function sidebarBtnClicked(id) {
+    console.log('boton clickeado ' + id)
+    if (id == 'new-group') {
+        $.ajax({
+            url: '/Groups',
+            success: function (data) {
+                $('body').html(data)
+            }
+        });
+    }
+}

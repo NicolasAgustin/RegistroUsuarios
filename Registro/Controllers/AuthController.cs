@@ -32,10 +32,13 @@ namespace Registro.Controllers
                 ViewData["error"] = TempData["error"];
             }
             return View();
+
         }
         [HttpPost]
         public ActionResult Login(Usuario u)
         {
+            u = new Usuario("", "", "", "nicolas.a.sandez@gmail.com", "pass", null);
+
             this.dbservice = new DatabaseService();
 
             UsuarioDB auth = this.dbservice.ObtenerUsuarioByEmailAndPass(u.Email, u.Password);
@@ -72,7 +75,10 @@ namespace Registro.Controllers
             return RedirectToAction("Index", "Account", auth);
             
         }
-        
+        public ActionResult GoToGroups()
+        {
+            return RedirectToAction("Index", "Groups");
+        }
         private UserProfileSessionData CreateSessionData(UsuarioDB u)
         {
             UserProfileSessionData sessionData = new UserProfileSessionData
