@@ -26,8 +26,10 @@
                         <span class="placeholder-form">Title</span>
                         <input type="text" name="title" class="name" placeholder="Task title" tabindex=1 />
                         <span class="placeholder-form">Task type</span>
-                        @Html.DropDownList("asignee", new SelectList(ViewBag.tipos), "Select type", new { @class = "form-control", tabindex = 2 })
+                        //@Html.DropDownListFor(name => name, new SelectList(ViewBag.tipos), "Select type", new { @class = "form-control", tabindex = 2, name = "type" })
+                        @Html.DropDownList("type", new SelectList(ViewBag.tipos), "Select type", new { @class = "form-control", tabindex = 2 })
                         <span class="placeholder-form">Asignee</span>
+                        //@Html.DropDownListFor(name => name, new SelectList(ViewBag.data), "Select Asignee", new { @class = "form-control", tabindex = 2, name = "asignee" })
                         @Html.DropDownList("asignee", new SelectList(ViewBag.data), "Select Asignee", new { @class = "form-control", tabindex = 2 })
                         <span class="placeholder-form">Description</span>
                         <textarea class="message" placeholder="Enter task description" tabindex=4></textarea>
