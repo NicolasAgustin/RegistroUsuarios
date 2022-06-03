@@ -71,3 +71,11 @@ li.active.have-children span::after {
 .sidebar-menu .have-children > ul {
     display: none;
 }
+
+.sidebar-wrapper {
+    width: 250px !important;
+    display: inline !important;
+    position: fixed;
+    margin-left: 5px;
+    margin-right: 5px;
+}

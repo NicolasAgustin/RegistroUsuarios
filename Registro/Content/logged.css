@@ -4,6 +4,7 @@
 
 h1.title-menu {
     margin: 0px;
+    color: black !important;
 }
 
 .avatar {
@@ -20,6 +21,7 @@ h1.title-menu {
     display: block;
     font-weight: bold;
     margin: 0px !important; 
+    color: black !important;
 }
 
 .details-display {
@@ -35,13 +37,16 @@ h1.title-menu {
     display: flex;
 }
 
-.table-container table{
+.table-container {
     width: 100%;
+    padding-left: 260px;
 }
 
 .rwd-table {
     margin: 1em 0;
     min-width: 300px;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .rwd-table tr {
