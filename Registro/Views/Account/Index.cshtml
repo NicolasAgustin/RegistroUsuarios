@@ -94,60 +94,61 @@
 </header>
 <content>
     <div class="boxbackground">
-        <ul class="sidebar-menu" style="display:inline-block">
-            <li><span class="nav-section-title"></span></li>
-            <li class="have-children">
-                <a href="#"><span class="fa fa-university"></span>Groups</a>
+        <div class="sidebar-wrapper">
+            <ul class="sidebar-menu">
+                <li><span class="nav-section-title"></span></li>
+                <li class="have-children">
+                    <a href="#"><span class="fa fa-university"></span>Groups</a>
+                    <ul>
+                        <li><a href="#" id="join-group">Join to an existing group</a></li>
+                        <li><a href="#" id="new-group">Create new group</a></li>
+                    </ul>
+                </li>
+                <li class="have-children">
+                    <a href="#"><span class="fa fa-tags"></span>My Spaces</a>
+                    <ul>
+                        <li><a href="#">Add Category</a></li>
+                        <li><a href="#">View Categories</a></li>
+                    </ul>
+                </li>
+                @*<li class="have-children">
+                <a href="#"><span class="fa fa-trophy"></span>Award</a>
                 <ul>
-                    <li><a href="#" id="join-group">Join to an existing group</a></li>
-                    <li><a href="#" id="new-group">Create new group</a></li>
+                    <li><a href="#">Add Award</a></li>
+                    <li><a href="#">View Awards</a></li>
                 </ul>
             </li>
             <li class="have-children">
-                <a href="#"><span class="fa fa-tags"></span>My Spaces</a>
+                <a href="#"><span class="fa fa-gavel"></span>Jury</a>
                 <ul>
-                    <li><a href="#">Add Category</a></li>
-                    <li><a href="#">View Categories</a></li>
+                    <li><a href="#">Add Jury</a></li>
+                    <li><a href="#">View Juries</a></li>
                 </ul>
             </li>
-            @*<li class="have-children">
-                    <a href="#"><span class="fa fa-trophy"></span>Award</a>
-                    <ul>
-                        <li><a href="#">Add Award</a></li>
-                        <li><a href="#">View Awards</a></li>
-                    </ul>
-                </li>
-                <li class="have-children">
-                    <a href="#"><span class="fa fa-gavel"></span>Jury</a>
-                    <ul>
-                        <li><a href="#">Add Jury</a></li>
-                        <li><a href="#">View Juries</a></li>
-                    </ul>
-                </li>
-                <li class="have-children">
-                    <a href="#"><span class="fa fa-user-o"></span>Author</a>
-                    <ul>
-                        <li><a href="#">Add Author</a></li>
-                        <li><a href="#">View Authors</a></li>
-                    </ul>
-                </li>*@
-            @*<li><a href="#"><span class="fa fa-picture-o"></span>Gallery</a></li>
-                <li class="have-children">
-                    <a href="#"><span class="fa fa-flag"></span>Reports</a>
-                    <ul>
-                        <li><a href="#">View Judging points</a></li>
-                        <li><a href="#">Create Acceptances List</a></li>
-                        <li><a href="#">Create Awarded List</a></li>
-                        <li><a href="#">View Candidates for Awards</a></li>
-                        <li><a href="responsive_table.html">Send Report Cards</a></li>
-                    </ul>
-                </li>
-                <li><a href="#"><span class="fa fa-envelope-o"></span>Messages</a></li>
-                <li><a href="#"><span class="fa fa-gear"></span>Configuration</a></li>*@
-        </ul>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-user-o"></span>Author</a>
+                <ul>
+                    <li><a href="#">Add Author</a></li>
+                    <li><a href="#">View Authors</a></li>
+                </ul>
+            </li>*@
+                @*<li><a href="#"><span class="fa fa-picture-o"></span>Gallery</a></li>
+            <li class="have-children">
+                <a href="#"><span class="fa fa-flag"></span>Reports</a>
+                <ul>
+                    <li><a href="#">View Judging points</a></li>
+                    <li><a href="#">Create Acceptances List</a></li>
+                    <li><a href="#">Create Awarded List</a></li>
+                    <li><a href="#">View Candidates for Awards</a></li>
+                    <li><a href="responsive_table.html">Send Report Cards</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><span class="fa fa-envelope-o"></span>Messages</a></li>
+            <li><a href="#"><span class="fa fa-gear"></span>Configuration</a></li>*@
+            </ul>
+        </div>
 
-
-        <div class="table-container" style="display:inline-block">
+        <div class="table-container">
             <div id="tcreate">
                 @*@using (Html.BeginForm("CreateTask", "Account", FormMethod.Get))
                     {*@
