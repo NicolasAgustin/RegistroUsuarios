@@ -39,6 +39,25 @@ namespace Registro.Models
             }
         }
 
+        public TaskType GetByName(string name)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<TaskType> collection = this.db.dbInstance.GetCollection<TaskType>(collName);
+                    TaskType found = collection.Find(doc => doc.Title == name).FirstOrDefault();
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+
+            }
+        }
+
         public List<TaskType> GetAll()
         {
             using (this.db = new MDatabase(this.dbName))

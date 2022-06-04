@@ -32,7 +32,11 @@
                         //@Html.DropDownListFor(name => name, new SelectList(ViewBag.data), "Select Asignee", new { @class = "form-control", tabindex = 2, name = "asignee" })
                         @Html.DropDownList("asignee", new SelectList(ViewBag.data), "Select Asignee", new { @class = "form-control", tabindex = 2 })
                         <span class="placeholder-form">Description</span>
-                        <textarea class="message" placeholder="Enter task description" tabindex=4></textarea>
+                        <textarea class="message" placeholder="Enter task description" tabindex=4 name="description"></textarea>
+                        <span class="placeholder-form">Estimated time</span>
+                        <input type="time" id="appt" name="TEstimated" min="00:00" max="99:99" required>
+                        <span class="placeholder-form">Tracked time</span>
+                        <input type="time" id="appt2" name="TTracked" min="00:00" max="99:99" value="00:00">
                         <input type="submit" name="submit" value="Create" class="submit" tabindex=5>
                     }
                 </div>

@@ -72,8 +72,8 @@ namespace Registro.Models
         public string Asignee { set; get; }
         public string Title { set; get; }
         public string Description { set; get; }
-        public double TEstimated { set; get; }
-        public double TTracked { set; get; }
+        public string TEstimated { set; get; }
+        public string TTracked { set; get; }
         public string Type { set; get; }
     }
 }
