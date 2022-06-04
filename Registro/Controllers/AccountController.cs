@@ -114,11 +114,11 @@ namespace Registro.Controllers
             newTarea.Owner = session.UserId;
             UsuarioDB user = dbservice.ObtenerUsuariosByName(t.Asignee);
             newTarea.Asignee = user._id;
-            newTarea.TEstimated = t.TEstimated;
+            newTarea.TEstimated = 0.0;
             newTarea.TTracked = 0.0;
             newTarea.Description = t.Description;
             newTarea.Title = t.Title;
-            //t.Type = new TaskType { Title = t.Type };
+            newTarea.Type = dbservice.ObtenerTipoByName(t.Title);
             dbservice.CreateTarea(newTarea);
             return RedirectToAction("Index");
         }

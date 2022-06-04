@@ -44,6 +44,10 @@ namespace Registro.Models
         {
             return this.tyrepo.GetAll();
         }
+        public TaskType ObtenerTipoByName(string nombre)
+        {
+            return this.tyrepo.GetByName(nombre);
+        }
         public List<UsuarioDB> ObtenerUsuarios()
         {
             return this.urepo.GetAll();
