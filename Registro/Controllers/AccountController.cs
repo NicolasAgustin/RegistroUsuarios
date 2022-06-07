@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using MongoDB.Bson;
 using System.Web.Mvc;
 using Registro.Models;
-using System.IO;
-using MongoDB.Bson;
 using System.Web.Security;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace Registro.Controllers
 {
@@ -19,17 +17,22 @@ namespace Registro.Controllers
         public ActionResult Index()
         {
             DatabaseService dbservice = new DatabaseService();
-            UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
+
+            UserProfileSessionData session = 
+                (UserProfileSessionData)this.Session["UserProfile"];
 
             if (session is null)
                 throw new Exception("Sesion nula.");
 
             if (this.Session["ProfilePicture"] is null)
             {
-                this.Session["ProfilePicture"] = "data:image/jpg;base64," + GetUserPicture(session.EmailAddress);
+                this.Session["ProfilePicture"] = "data:image/jpg;base64,"
+                                     + GetUserPicture(session.EmailAddress);
             }
 
-            List<TareaDB> tareas = dbservice.ObtenerTareasByAsigneeOrOwner(session.UserId);
+            List<TareaDB> tareas = dbservice
+                                   .ObtenerTareasByAsigneeOrOwner(session.UserId);
+            
             this.Session["Tasks"] = tareas;
             return View(tareas);
         }
@@ -73,9 +76,13 @@ namespace Registro.Controllers
             if (user == null)
                 return null;
 
-            byte[] obtainedPicture = System.IO.File.ReadAllBytes(user.ProfilePictureServerPath);
+            byte[] obtainedPicture = System.IO.File.ReadAllBytes(
+                user.ProfilePictureServerPath
+            );
 
-            return Convert.ToBase64String(obtainedPicture, 0, obtainedPicture.Length);
+            return Convert.ToBase64String(obtainedPicture,
+                                          0,
+                                          obtainedPicture.Length);
         }
         [HttpGet]
         [Authorize]
@@ -107,15 +114,21 @@ namespace Registro.Controllers
         public ActionResult CreateTask(TareaForm t)
         { 
             DatabaseService dbservice = new DatabaseService();
-            UserProfileSessionData session = (UserProfileSessionData)this.Session["UserProfile"];
+            
+            UserProfileSessionData session = 
+                (UserProfileSessionData)this.Session["UserProfile"];
 
             TareaDB newTarea = new TareaDB();
 
             newTarea.Owner = session.UserId;
             UsuarioDB user = dbservice.ObtenerUsuariosByName(t.Asignee);
             newTarea.Asignee = user._id;
-            newTarea.TEstimated = 0.0;
-            newTarea.TTracked = 0.0;
+            newTarea.TEstimated = TimeSpan.ParseExact(t.TEstimated,
+                                                      @"hh\:mm",
+                                                      CultureInfo.InvariantCulture);
+            newTarea.TTracked = TimeSpan.ParseExact(t.TTracked,
+                                                      @"hh\:mm",
+                                                      CultureInfo.InvariantCulture);
             newTarea.Description = t.Description;
             newTarea.Title = t.Title;
             newTarea.Type = dbservice.ObtenerTipoByName(t.Title);

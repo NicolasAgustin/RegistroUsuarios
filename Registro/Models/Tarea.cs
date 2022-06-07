@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using MongoDB.Bson;
@@ -12,8 +13,12 @@ namespace Registro.Models
         public ObjectId Asignee { set; get; }
         public string Title { set; get; }
         public string Description { set; get; }
-        public double TEstimated { set; get; }
-        public double TTracked { set; get; }
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}",
+                       ApplyFormatInEditMode = true)]
+        public TimeSpan TEstimated { set; get; }
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}",
+                       ApplyFormatInEditMode = true)]
+        public TimeSpan TTracked { set; get; }
         public TaskType Type { set; get; }
 
         public Tarea()
@@ -21,12 +26,18 @@ namespace Registro.Models
             Owner = ObjectId.Empty;
             Asignee = ObjectId.Empty;
             Description = String.Empty;
-            TEstimated = 0.0;
-            TTracked = 0.0;
+            TEstimated = TimeSpan.MinValue;
+            TTracked = TimeSpan.MinValue;
             Type = null;
         }
 
-        public Tarea(ObjectId owner, ObjectId asignee, string desc, string title, double estimated, double tracked, TaskType type)
+        public Tarea(ObjectId owner, 
+                     ObjectId asignee,
+                     string desc,
+                     string title,
+                     TimeSpan estimated,
+                     TimeSpan tracked,
+                     TaskType type)
         {
             Owner = owner;
             Asignee = asignee;
@@ -57,7 +68,20 @@ namespace Registro.Models
         {
             _id = ObjectId.Empty;
         }
-        public TareaDB(ObjectId _id, ObjectId owner, ObjectId asignee, string desc, string title, double estimated, double tracked, TaskType type) : base(owner, asignee, desc, title, estimated, tracked, type)
+        public TareaDB(ObjectId _id,
+                       ObjectId owner,
+                       ObjectId asignee,
+                       string desc,
+                       string title,
+                       TimeSpan estimated,
+                       TimeSpan tracked,
+                       TaskType type) : base(owner,
+                                             asignee,
+                                             desc,
+                                             title,
+                                             estimated,
+                                             tracked,
+                                             type)
         {
             this._id = _id;
         }
