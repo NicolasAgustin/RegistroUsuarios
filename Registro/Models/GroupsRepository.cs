@@ -98,7 +98,7 @@ namespace Registro.Models
                 }
             }
         }
-        public List<Group> GetGroupByName(string name)
+        public List<Group> GetGroupsByName(string name)
         {
             using (this.db = new MDatabase(this.dbName))
             {
@@ -107,6 +107,54 @@ namespace Registro.Models
                     IMongoCollection<Group> collection = this.db.dbInstance.GetCollection<Group>(collName);
                     List<Group> result = collection.Find(doc => doc.Nombre == name).ToList();
                     return result;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+
+        public Group GetGroupByName(string name)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<Group> collection = this.db.dbInstance.GetCollection<Group>(collName);
+                    Group result = collection.Find(doc => doc.Nombre == name).FirstOrDefault();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+
+        public Group AddTask(string gname, ObjectId id)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    Group found = this.GetGroupByName(gname);
+                    if (found.Listas is null)
+                        found.Listas = new List<ObjectId>();
+                    found.Listas.Add(id);
+                    IMongoCollection<Group> collection =
+                        this.db.dbInstance.GetCollection<Group>(collName);
+
+                    var filter = Builders<Group>.Filter.Eq(doc => doc._id, found._id);
+                    // Por ahora usamos listas para poner las tareas
+                    // En realidad cada grupo puede tener muchas listas de tareas
+                    var update = Builders<Group>.Update.Set(doc => doc.Listas, found.Listas);
+
+                    UpdateResult result = collection.UpdateOne(filter, update);
+
+                    return found;
                 }
                 catch (Exception e)
                 {

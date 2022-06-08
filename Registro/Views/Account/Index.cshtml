@@ -74,6 +74,18 @@
                 }
             });
         })
+
+        $('.option-group').on('click', function () {
+            var gname = this.textContent;
+            $.ajax({
+                type: 'POST',
+                url: '/Account/ShowTasksInGroup',
+                data: { name: gname },
+                success: function (data) {
+                    $('body').html(data)
+                }
+            })
+        })
     </script>
 }
 <header>
@@ -105,10 +117,16 @@
                     </ul>
                 </li>
                 <li class="have-children">
-                    <a href="#"><span class="fa fa-tags"></span>My Spaces</a>
+                    <a href="#" id="my-spaces"><span class="fa fa-tags"></span>My Spaces</a>
                     <ul>
-                        <li><a href="#">Add Category</a></li>
-                        <li><a href="#">View Categories</a></li>
+                        @{ int i = 0; }
+                        @foreach (var g in (List<Group>)Session["Grupos"])
+                        {
+                            <li class="option-group"><a href="#" index-value="@i">@g.Nombre</a></li>
+                            i++;
+                        }
+                        @*<li><a href="#">Add Category</a></li>
+                        <li><a href="#">View Categories</a></li>*@
                     </ul>
                 </li>
                 @*<li class="have-children">

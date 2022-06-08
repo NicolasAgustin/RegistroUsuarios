@@ -7,23 +7,22 @@ using Registro.Models;
 
 namespace Registro.Controllers
 {
+    [Authorize]
+    [AuthorizeRole(Role.USER, Role.ADMIN)]
     public class GroupsController : Controller
     {
         // GET: Groups
         [HttpGet]
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
         public ActionResult JoinGroup()
         {
             return View();
         }
+        
     }
 }

@@ -28,6 +28,10 @@ namespace Registro.Models
         {
             return this.tyrepo.Insert(newType);
         }
+        public TareaDB ObtenerTareaById(ObjectId id)
+        {
+            return trepo.GetById(id);
+        }
         public List<TareaDB> ObtenerTareasByAsignee(ObjectId id)
         {
             return trepo.GetByAsignee(id);
@@ -64,9 +68,9 @@ namespace Registro.Models
         {
             return this.urepo.GetByEmailAndPass(email, password);
         }
-        public void CreateTarea(TareaDB t)
+        public ObjectId CreateTarea(TareaDB t)
         {
-            this.trepo.Insert(t);
+            return this.trepo.Insert(t);
         }
         public UsuarioDB GetUserById(ObjectId id)
         {
@@ -83,6 +87,19 @@ namespace Registro.Models
         public ObjectId CreateGroup(Group g)
         {
             return grepo.Insert(g);
+        }
+        public Group ObtenerGrupoByName(string gname)
+        {
+            return grepo.GetGroupByName(gname);
+        }
+        public List<Group> ObtenerGrupos()
+        {
+            return grepo.GetAll();
+        }
+
+        public Group AgregarTareaAGrupo(string gname, ObjectId id)
+        {
+            return grepo.AddTask(gname, id);
         }
 
     }

@@ -8,18 +8,20 @@ using System.Collections.Generic;
 
 namespace Registro.Controllers
 {
+    [Authorize]
+    [AuthorizeRole(Role.USER, Role.ADMIN)]
     public class AccountController : Controller
     {
         // GET: Account
         [HttpGet]
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
         public ActionResult Index()
         {
             DatabaseService dbservice = new DatabaseService();
 
             UserProfileSessionData session = 
                 (UserProfileSessionData)this.Session["UserProfile"];
+
+            //dbservice.CreateGroup(new Group { Nombre = "Grupo1", Creator = session.UserId });
 
             if (session is null)
                 throw new Exception("Sesion nula.");
@@ -32,8 +34,12 @@ namespace Registro.Controllers
 
             List<TareaDB> tareas = dbservice
                                    .ObtenerTareasByAsigneeOrOwner(session.UserId);
-            
+
+            List<Group> grupos = dbservice.ObtenerGrupos();
+
+            this.Session["Grupos"] = grupos;
             this.Session["Tasks"] = tareas;
+
             return View(tareas);
         }
         [HttpGet]
@@ -85,8 +91,6 @@ namespace Registro.Controllers
                                           obtainedPicture.Length);
         }
         [HttpGet]
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
         public ActionResult CreateTask()
         {
             DatabaseService dbservice = new DatabaseService();
@@ -108,8 +112,7 @@ namespace Registro.Controllers
             ViewBag.tipos = types;
             return PartialView("_CreateTask");
         }
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
+        
         [HttpPost]
         public ActionResult CreateTask(TareaForm t)
         { 
@@ -132,19 +135,42 @@ namespace Registro.Controllers
             newTarea.Description = t.Description;
             newTarea.Title = t.Title;
             newTarea.Type = dbservice.ObtenerTipoByName(t.Title);
-            dbservice.CreateTarea(newTarea);
+            ObjectId nid = dbservice.CreateTarea(newTarea);
+            dbservice.AgregarTareaAGrupo("Grupo1", nid);
+
             return RedirectToAction("Index");
         }
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
+
+        [HttpPost]
+        public ActionResult ShowTasksInGroup(string name)
+        {
+            DatabaseService dbservice = new DatabaseService();
+            Group found = dbservice.ObtenerGrupoByName(name);
+            List<ObjectId> tareasIds = found.Listas;
+            if (tareasIds is null)
+            {
+                return View("Index");
+            }
+
+            List<TareaDB> tareas = new List<TareaDB>();
+            foreach(var tid in tareasIds)
+            {
+                TareaDB t = dbservice.ObtenerTareaById(tid);
+                tareas.Add(t);
+            }
+
+            this.Session["Tasks"] = tareas;
+
+            return View("Index", tareas);
+
+        }
+
         public List<TaskType> GetTaskTypes()
         {
             DatabaseService dbservice = new DatabaseService();
             return dbservice.ObtenerTiposTareas();
         }
 
-        [Authorize]
-        [AuthorizeRole(Role.USER, Role.ADMIN)]
         public List<UsuarioDB> GetUsuarios()
         {
             DatabaseService dbservice = new DatabaseService();
