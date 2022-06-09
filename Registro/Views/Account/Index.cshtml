@@ -40,6 +40,7 @@
 
             $(".sidebar-menu > li.have-children a").on("click", function (i) {
                 i.preventDefault();
+                console.log($(this).parent().hasClass("active"))
                 if (!$(this).parent().hasClass("active")) {
                     $(".sidebar-menu li ul").slideUp();
                     $(this).next().slideToggle();
@@ -181,7 +182,7 @@
                     <th>Task type</th>
                     <th>Asignee</th>
                 </tr>
-                @foreach (var item in Model)
+                @foreach (var item in Model ?? Enumerable.Empty<TareaDB>())
                 {
                     var index = Model.IndexOf(item);
                     //
