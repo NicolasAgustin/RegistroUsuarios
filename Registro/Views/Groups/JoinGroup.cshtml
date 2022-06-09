@@ -1,7 +1,75 @@
-﻿
+﻿@using Registro.Models
+@model Group
+
 @{
     ViewBag.Title = "JoinGroup";
+
+    //*
+    //TODO: crear una barra de busqueda con ajax que se vaya actualizando
+    //mientras escribimos para implementar la asignacion de un usuario
+    //a un grupo
+    //Esto solamente lo podra hacer un usuario con el rol correcto dentro
+    //del grupo, el cual sera asignado solamente por el creador.*//
+
 }
+
+
 
 <h2>JoinGroup</h2>
 
+<script>
+    $(document).ready(function () {
+
+        $("#txtSearch").autocomplete({
+            source: function (request, response) {
+                console.log('Request', request)
+                console.log('Response', response)
+                $.ajax({
+                    url: "/Groups/ObtenerGrupos",
+                    type: "POST",
+                    dataType: "json",
+                    data: { termino: request.term },
+                    success: function (data) {
+                        console.log(data)
+                        $("#resultados").empty()
+                        var i = 0
+                        data.forEach(result =>
+                            $('#resultados').append(
+                                `<li id=\"r${i}\">${result}</li>`
+                            ),
+                            i++
+                        )
+                        //response($.map(data, function (item) {
+                        //    return { label: item.Name, value: item.Name };
+                        //}))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (resultsCount) {
+                        console.log(resultsCount)
+                }
+            }
+        });
+    });
+
+</script>
+
+<div class="form-horizontal">
+
+    <div class="form-group">
+
+        <div class="col-md-12 searchWrapper">
+            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control", id = "txtSearch" } })
+        </div>
+    </div>
+
+    <div class="resultsWrapper">
+        <ul id="resultados">
+
+        </ul>
+    </div>
+
+</div>    

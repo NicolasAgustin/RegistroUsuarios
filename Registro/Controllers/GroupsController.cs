@@ -24,5 +24,15 @@ namespace Registro.Controllers
             return View();
         }
         
+        public JsonResult ObtenerGrupos(string termino)
+        {
+            DatabaseService dbservice = new DatabaseService();
+            List<string> grupos = dbservice.ObtenerGrupos()
+                .Where(
+                    s => s.Nombre.ToLower().StartsWith(termino.ToLower())
+                ).Select(x => x.Nombre).ToList();
+            return Json(grupos, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -254,6 +254,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\CreateTask.css" />
     <Content Include="Content\CreateTaskForm.css" />
+    <Content Include="Content\JoinGroup.css" />
     <Content Include="Content\LeftMenu.css" />
     <Content Include="Content\logged.css" />
     <Content Include="Content\login.css" />
