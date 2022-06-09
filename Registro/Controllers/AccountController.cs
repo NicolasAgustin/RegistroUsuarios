@@ -21,7 +21,7 @@ namespace Registro.Controllers
             UserProfileSessionData session = 
                 (UserProfileSessionData)this.Session["UserProfile"];
 
-            //dbservice.CreateGroup(new Group { Nombre = "Grupo1", Creator = session.UserId });
+            //dbservice.CreateGroup(new Group { Nombre = "Grupo2", Creator = session.UserId });
 
             if (session is null)
                 throw new Exception("Sesion nula.");
@@ -32,12 +32,22 @@ namespace Registro.Controllers
                                      + GetUserPicture(session.EmailAddress);
             }
 
-            List<TareaDB> tareas = dbservice
-                                   .ObtenerTareasByAsigneeOrOwner(session.UserId);
+            List<TareaDB> tareas = default;
+               //.ObtenerTareasByAsigneeOrOwner(session.UserId);
 
-            List<Group> grupos = dbservice.ObtenerGrupos();
+            List<Group> grupos = 
+                dbservice.ObtenerGruposByMember(session.UserId);
+
+            Group currentGroup = default;
+
+            if (grupos != null)
+            {
+                tareas = dbservice.ObtenerTareasByIds(grupos[0].Listas);
+                currentGroup = grupos[0];
+            }
 
             this.Session["Grupos"] = grupos;
+            this.Session["CurrentGroup"] = currentGroup;
             this.Session["Tasks"] = tareas;
 
             return View(tareas);
@@ -126,17 +136,27 @@ namespace Registro.Controllers
             newTarea.Owner = session.UserId;
             UsuarioDB user = dbservice.ObtenerUsuariosByName(t.Asignee);
             newTarea.Asignee = user._id;
-            newTarea.TEstimated = TimeSpan.ParseExact(t.TEstimated,
-                                                      @"hh\:mm",
-                                                      CultureInfo.InvariantCulture);
-            newTarea.TTracked = TimeSpan.ParseExact(t.TTracked,
-                                                      @"hh\:mm",
-                                                      CultureInfo.InvariantCulture);
+            newTarea.TEstimated = TimeSpan.ParseExact(
+                t.TEstimated,
+                @"hh\:mm",
+                CultureInfo.InvariantCulture
+            );
+
+            newTarea.TTracked = TimeSpan.ParseExact(
+                t.TTracked,
+                @"hh\:mm",
+                CultureInfo.InvariantCulture
+            );
+
             newTarea.Description = t.Description;
             newTarea.Title = t.Title;
             newTarea.Type = dbservice.ObtenerTipoByName(t.Title);
             ObjectId nid = dbservice.CreateTarea(newTarea);
-            dbservice.AgregarTareaAGrupo("Grupo1", nid);
+            Group currentGroup = (Group)this.Session["CurrentGroup"];
+            if (currentGroup != null)
+            {
+                dbservice.AgregarTareaAGrupo(currentGroup.Nombre, nid);
+            }
 
             return RedirectToAction("Index");
         }
@@ -144,20 +164,17 @@ namespace Registro.Controllers
         [HttpPost]
         public ActionResult ShowTasksInGroup(string name)
         {
+            ModelState.Clear();
             DatabaseService dbservice = new DatabaseService();
             Group found = dbservice.ObtenerGrupoByName(name);
             List<ObjectId> tareasIds = found.Listas;
             if (tareasIds is null)
             {
-                return View("Index");
+                this.Session["Tasks"] = null;
+                return View("Index", null);
             }
 
-            List<TareaDB> tareas = new List<TareaDB>();
-            foreach(var tid in tareasIds)
-            {
-                TareaDB t = dbservice.ObtenerTareaById(tid);
-                tareas.Add(t);
-            }
+            List<TareaDB> tareas = dbservice.ObtenerTareasByIds(tareasIds);
 
             this.Session["Tasks"] = tareas;
 
