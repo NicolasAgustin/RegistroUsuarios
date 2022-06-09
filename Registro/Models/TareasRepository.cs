@@ -128,5 +128,26 @@ namespace Registro.Models
                 }
             }
         }
+
+        public List<TareaDB> GetManyById(List<ObjectId> ids)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<TareaDB> collection = 
+                        this.db.dbInstance.GetCollection<TareaDB>(collName);
+                    List<TareaDB> result = 
+                        collection.Find(doc => ids.Contains(doc._id)).ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+
     }
 }

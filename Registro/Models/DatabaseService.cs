@@ -36,6 +36,10 @@ namespace Registro.Models
         {
             return trepo.GetByAsignee(id);
         }
+        public List<TareaDB> ObtenerTareasByIds(List<ObjectId> ids)
+        {
+            return trepo.GetManyById(ids);
+        }
         public List<TareaDB> ObtenerTareasByOwner(ObjectId id)
         {
             return trepo.GetByOwner(id);
@@ -95,6 +99,20 @@ namespace Registro.Models
         public List<Group> ObtenerGrupos()
         {
             return grepo.GetAll();
+        }
+
+        public List<Group> ObtenerGruposByMember(ObjectId id)
+        {
+            return grepo.GetGroupsByParticipant(id);
+        }
+
+        public List<TareaDB> ObtenerTareasFromGroup(string gname)
+        {
+            Group g = grepo.GetGroupByName(gname);
+            if (g.Listas == null)
+                return default;
+            
+            return trepo.GetManyById(g.Listas);
         }
 
         public Group AgregarTareaAGrupo(string gname, ObjectId id)
