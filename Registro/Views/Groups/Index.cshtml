@@ -3,5 +3,28 @@
     ViewBag.Title = "Index";
 }
 
+@using (Html.BeginForm("Index", "Account", FormMethod.Get))
+{
+    <div class="go-btn">
+        <button type="submit" class="btn">Back</button>
+    </div>
+}
+
 <h2>Index</h2>
 
+<div class="boxbackground">
+    <div>
+        <section id="newgroup">
+            <div class="content">
+                <div id="form">
+                    @using (Html.BeginForm("CreateGroup", "Groups", FormMethod.Post, new { id = "contactForm" }))
+                    {
+                        <span class="placeholder-form">Group name</span>
+                        <input type="text" name="nombre" class="name" placeholder="Task title" tabindex=1 />
+                        <input type="submit" name="submit" value="Create" class="submit" tabindex=5>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

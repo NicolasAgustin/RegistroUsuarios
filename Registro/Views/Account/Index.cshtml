@@ -88,6 +88,21 @@
             })
         })
     </script>
+    <script>
+        $(document).ready(function () {
+            $('tr').mouseenter(function () {
+                var id = this.getAttribute('data-id');
+                console.log(id)
+                $(`#${id}add`).show()
+                this.prueba = 'prueba'
+            }).mouseleave(function () {
+                console.log(this.prueba)
+                var id = this.getAttribute('data-id');
+                console.log(id)
+                $(`#${id}add`).hide()
+            })
+        })
+    </script>
 }
 <header>
     <div class="head ">
@@ -176,7 +191,8 @@
             </div>
             <table class="rwd-table" id="showtable">
                 <tr>
-                    <th>Description</th>
+                    <th></th>
+                    <th>Title</th>
                     <th>Estimated time</th>
                     <th>Tracked time</th>
                     <th>Task type</th>
@@ -185,8 +201,13 @@
                 @foreach (var item in Model ?? Enumerable.Empty<TareaDB>())
                 {
                     var index = Model.IndexOf(item);
-                    //
+                    var btnaddId = index + "add";
                     <tr style="width: 100%" data-id="@index" name="row" id="task">
+                        <td class="btnsec">
+                            <a href="#">
+                                <img src="@Url.Content("~/Content/add.png")" alt="btnimage" id="@btnaddId" class="addbtn"/>
+                            </a>
+                        </td>
                         <td>
                             @Html.DisplayFor(model => item.Title)
                         </td>

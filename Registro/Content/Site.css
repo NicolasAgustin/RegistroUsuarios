@@ -295,3 +295,14 @@ input[type="file"] {
     display: inline !important;
     justify-content: space-between;
 }
+
+.addbtn {
+    width: 28px;
+    height: 28px;
+    display: none;
+}
+
+.btnsec {
+    width: 28px;
+    height: 28px;
+}

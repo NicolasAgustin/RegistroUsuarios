@@ -23,10 +23,10 @@ namespace Registro.Models
             this.tyrepo = new TypesRepository(this.dbName);
             this.grepo = new GroupsRepository(this.dbName);
         }
-
-        public ObjectId CreateType(TaskType newType)
+        // Tareas
+        public ObjectId CreateTarea(TareaDB t)
         {
-            return this.tyrepo.Insert(newType);
+            return this.trepo.Insert(t);
         }
         public TareaDB ObtenerTareaById(ObjectId id)
         {
@@ -48,6 +48,11 @@ namespace Registro.Models
         {
             return trepo.GetByAsigneeOrOwner(id);
         }
+        // Tipos
+        public ObjectId CreateType(TaskType newType)
+        {
+            return this.tyrepo.Insert(newType);
+        }
         public List<TaskType> ObtenerTiposTareas()
         {
             return this.tyrepo.GetAll();
@@ -56,6 +61,7 @@ namespace Registro.Models
         {
             return this.tyrepo.GetByName(nombre);
         }
+        // Usuarios
         public List<UsuarioDB> ObtenerUsuarios()
         {
             return this.urepo.GetAll();
@@ -72,10 +78,6 @@ namespace Registro.Models
         {
             return this.urepo.GetByEmailAndPass(email, password);
         }
-        public ObjectId CreateTarea(TareaDB t)
-        {
-            return this.trepo.Insert(t);
-        }
         public UsuarioDB GetUserById(ObjectId id)
         {
             return this.urepo.GetById(id);
@@ -88,6 +90,7 @@ namespace Registro.Models
         {
             return ObjectId.Empty;
         }
+        // Grupos
         public ObjectId CreateGroup(Group g)
         {
             return grepo.Insert(g);
@@ -100,12 +103,10 @@ namespace Registro.Models
         {
             return grepo.GetAll();
         }
-
         public List<Group> ObtenerGruposByMember(ObjectId id)
         {
             return grepo.GetGroupsByParticipant(id);
         }
-
         public List<TareaDB> ObtenerTareasFromGroup(string gname)
         {
             Group g = grepo.GetGroupByName(gname);
@@ -114,10 +115,13 @@ namespace Registro.Models
             
             return trepo.GetManyById(g.Listas);
         }
-
         public Group AgregarTareaAGrupo(string gname, ObjectId id)
         {
             return grepo.AddTask(gname, id);
+        }
+        public Group AgregarMiembroAGrupo(string gname, ObjectId id)
+        {
+            return grepo.AddMemberToGroup(gname, id);
         }
 
     }

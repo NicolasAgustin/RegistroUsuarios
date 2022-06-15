@@ -23,7 +23,18 @@ namespace Registro.Controllers
         {
             return View();
         }
-        
+
+        [HttpPost]
+        public ActionResult JoinGroup(string gname)
+        {
+            DatabaseService dbservice = new DatabaseService();
+            UserProfileSessionData session =
+                (UserProfileSessionData)this.Session["UserProfile"];
+            var userId = session.UserId;
+            dbservice.AgregarMiembroAGrupo(gname, userId);
+            return RedirectToAction("Index", "Account");
+        }
+
         public JsonResult ObtenerGrupos(string termino)
         {
             DatabaseService dbservice = new DatabaseService();
@@ -32,6 +43,18 @@ namespace Registro.Controllers
                     s => s.Nombre.ToLower().StartsWith(termino.ToLower())
                 ).Select(x => x.Nombre).ToList();
             return Json(grupos, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult CreateGroup(Group g)
+        {
+            UserProfileSessionData session =
+                (UserProfileSessionData)this.Session["UserProfile"];
+            g.Creator = session.UserId;
+            DatabaseService dbservice = new DatabaseService();
+            dbservice.CreateGroup(g);
+            this.Session["CurrentGroup"] = g;
+            return RedirectToAction("Index", "Account");
         }
 
     }

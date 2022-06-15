@@ -40,11 +40,15 @@ namespace Registro.Controllers
 
             Group currentGroup = default;
 
-            if (grupos != null)
+            if (this.Session["CurrentGroup"] != null)
             {
-                tareas = dbservice.ObtenerTareasByIds(grupos[0].Listas);
+                currentGroup = (Group)this.Session["CurrentGroup"];
+            } else
+            {
                 currentGroup = grupos[0];
             }
+
+            tareas = dbservice.ObtenerTareasByIds(currentGroup.Listas);
 
             this.Session["Grupos"] = grupos;
             this.Session["CurrentGroup"] = currentGroup;

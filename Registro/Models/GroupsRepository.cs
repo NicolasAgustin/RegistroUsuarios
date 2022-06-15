@@ -163,5 +163,35 @@ namespace Registro.Models
                 }
             }
         }
+
+        public Group AddMemberToGroup(string gname, ObjectId id)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    Group found = this.GetGroupByName(gname);
+                    if (found.Members is null)
+                        found.Members = new List<ObjectId>();
+                    found.Members.Add(id);
+                    IMongoCollection<Group> collection =
+                        this.db.dbInstance.GetCollection<Group>(collName);
+
+                    var filter = Builders<Group>.Filter.Eq(doc => doc._id, found._id);
+                    // Por ahora usamos listas para poner las tareas
+                    // En realidad cada grupo puede tener muchas listas de tareas
+                    var update = Builders<Group>.Update.Set(doc => doc.Members, found.Members);
+
+                    UpdateResult result = collection.UpdateOne(filter, update);
+
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
     }
 }
