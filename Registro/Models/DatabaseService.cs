@@ -115,9 +115,16 @@ namespace Registro.Models
             
             return trepo.GetManyById(g.Listas);
         }
+        /// <summary>
+        /// Class <c>Point</c> models a point in a two-dimensional plane.
+        /// </summary>
         public Group AgregarTareaAGrupo(string gname, ObjectId id)
         {
             return grepo.AddTask(gname, id);
+        }
+        public Group MoverTareaAGrupo(string gname, ObjectId id)
+        {
+            return grepo.MoveTask(gname, id);
         }
         public Group AgregarMiembroAGrupo(string gname, ObjectId id)
         {
