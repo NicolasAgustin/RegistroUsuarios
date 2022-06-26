@@ -299,7 +299,7 @@ input[type="file"] {
 .addbtn {
     width: 28px;
     height: 28px;
-    display: none;
+    visibility: hidden;
 }
 
 .btnsec {
