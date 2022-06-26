@@ -11,11 +11,33 @@
 </head>
 @section scripts {
     <script>
-        $("#showtable").on("click", "#task", function () {
+        $("#showtable").on("click", "#task", function (event) {
+            console.log(event)
             var i = this.getAttribute('data-id')
             $.ajax({
                 url: "/Account/TaskDetails",
                 data: { index: i },
+                success: function (data) {
+                    $("#showmodal .modal-dialog").html(data);
+                    $("#showmodal").modal("show");
+                }
+            });
+        });
+    </script>
+    
+    <script>
+        $("#showtable").on("click", "#abtnadd", function (event) {
+            console.log(event)
+            // detenemos la propagacion para 
+            // que no se llame al evento del padre
+            event.stopPropagation()
+            var taskIndex = this.children[0].getAttribute('id').replace('add','')
+            console.log(taskIndex)
+            
+            $.ajax({
+                url: "/Account/_AddToGroup",
+                type: 'GET',
+                data: { index: taskIndex },
                 success: function (data) {
                     $("#showmodal .modal-dialog").html(data);
                     $("#showmodal").modal("show");
@@ -40,13 +62,11 @@
 
             $(".sidebar-menu > li.have-children a").on("click", function (i) {
                 i.preventDefault();
-                console.log($(this).parent().hasClass("active"))
                 if (!$(this).parent().hasClass("active")) {
                     $(".sidebar-menu li ul").slideUp();
                     $(this).next().slideToggle();
                     $(".sidebar-menu li").removeClass("active");
                     $(this).parent().addClass("active");
-                    console.log('clicked')
                 }
                 else {
                     $(this).next().slideToggle();
@@ -92,14 +112,10 @@
         $(document).ready(function () {
             $('tr').mouseenter(function () {
                 var id = this.getAttribute('data-id');
-                console.log(id)
-                $(`#${id}add`).show()
-                this.prueba = 'prueba'
+                $(`#${id}add`).css('visibility', 'visible')
             }).mouseleave(function () {
-                console.log(this.prueba)
                 var id = this.getAttribute('data-id');
-                console.log(id)
-                $(`#${id}add`).hide()
+                $(`#${id}add`).css('visibility', 'hidden')
             })
         })
     </script>
@@ -142,43 +158,43 @@
                             i++;
                         }
                         @*<li><a href="#">Add Category</a></li>
-                        <li><a href="#">View Categories</a></li>*@
+                            <li><a href="#">View Categories</a></li>*@
                     </ul>
                 </li>
                 @*<li class="have-children">
-                <a href="#"><span class="fa fa-trophy"></span>Award</a>
-                <ul>
-                    <li><a href="#">Add Award</a></li>
-                    <li><a href="#">View Awards</a></li>
-                </ul>
-            </li>
-            <li class="have-children">
-                <a href="#"><span class="fa fa-gavel"></span>Jury</a>
-                <ul>
-                    <li><a href="#">Add Jury</a></li>
-                    <li><a href="#">View Juries</a></li>
-                </ul>
-            </li>
-            <li class="have-children">
-                <a href="#"><span class="fa fa-user-o"></span>Author</a>
-                <ul>
-                    <li><a href="#">Add Author</a></li>
-                    <li><a href="#">View Authors</a></li>
-                </ul>
-            </li>*@
+                        <a href="#"><span class="fa fa-trophy"></span>Award</a>
+                        <ul>
+                            <li><a href="#">Add Award</a></li>
+                            <li><a href="#">View Awards</a></li>
+                        </ul>
+                    </li>
+                    <li class="have-children">
+                        <a href="#"><span class="fa fa-gavel"></span>Jury</a>
+                        <ul>
+                            <li><a href="#">Add Jury</a></li>
+                            <li><a href="#">View Juries</a></li>
+                        </ul>
+                    </li>
+                    <li class="have-children">
+                        <a href="#"><span class="fa fa-user-o"></span>Author</a>
+                        <ul>
+                            <li><a href="#">Add Author</a></li>
+                            <li><a href="#">View Authors</a></li>
+                        </ul>
+                    </li>*@
                 @*<li><a href="#"><span class="fa fa-picture-o"></span>Gallery</a></li>
-            <li class="have-children">
-                <a href="#"><span class="fa fa-flag"></span>Reports</a>
-                <ul>
-                    <li><a href="#">View Judging points</a></li>
-                    <li><a href="#">Create Acceptances List</a></li>
-                    <li><a href="#">Create Awarded List</a></li>
-                    <li><a href="#">View Candidates for Awards</a></li>
-                    <li><a href="responsive_table.html">Send Report Cards</a></li>
-                </ul>
-            </li>
-            <li><a href="#"><span class="fa fa-envelope-o"></span>Messages</a></li>
-            <li><a href="#"><span class="fa fa-gear"></span>Configuration</a></li>*@
+                    <li class="have-children">
+                        <a href="#"><span class="fa fa-flag"></span>Reports</a>
+                        <ul>
+                            <li><a href="#">View Judging points</a></li>
+                            <li><a href="#">Create Acceptances List</a></li>
+                            <li><a href="#">Create Awarded List</a></li>
+                            <li><a href="#">View Candidates for Awards</a></li>
+                            <li><a href="responsive_table.html">Send Report Cards</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#"><span class="fa fa-envelope-o"></span>Messages</a></li>
+                    <li><a href="#"><span class="fa fa-gear"></span>Configuration</a></li>*@
             </ul>
         </div>
 
@@ -204,8 +220,8 @@
                     var btnaddId = index + "add";
                     <tr style="width: 100%" data-id="@index" name="row" id="task">
                         <td class="btnsec">
-                            <a href="#">
-                                <img src="@Url.Content("~/Content/add.png")" alt="btnimage" id="@btnaddId" class="addbtn"/>
+                            <a href="#" id="abtnadd">
+                                <img src="@Url.Content("~/Content/add.png")" alt="btnimage" id="@btnaddId" class="addbtn" />
                             </a>
                         </td>
                         <td>
