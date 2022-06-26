@@ -317,6 +317,7 @@
     <Content Include="Views\Account\_LeftMenu.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\JoinGroup.cshtml" />
+    <Content Include="Views\Account\_AddToGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
