@@ -164,6 +164,73 @@ namespace Registro.Models
             }
         }
 
+        public Group FindTaskInGroup(ObjectId taskId)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    List<Group> grupos = this.GetAll();
+                    foreach(var group in grupos)
+                    {
+                        List<ObjectId> ids = group.Listas;
+                        if (ids != null)
+                        {
+                            if (ids.Contains(taskId))
+                                return group;
+                        }
+                    }
+                    return default;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+
+        public Group MoveTask(string gname, ObjectId id)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    Group found = this.GetGroupByName(gname);
+                    Group groupWithTask = this.FindTaskInGroup(id);
+                    if (found.Listas is null)
+                        found.Listas = new List<ObjectId>();
+                    found.Listas.Add(id);
+
+                    if (groupWithTask.Listas != null)
+                        groupWithTask.Listas.Remove(id);
+
+                    IMongoCollection<Group> collection =
+                        this.db.dbInstance.GetCollection<Group>(collName);
+
+                    var filter = Builders<Group>.Filter.Eq(doc => doc._id, found._id);
+                    // Por ahora usamos listas para poner las tareas
+                    // En realidad cada grupo puede tener muchas listas de tareas
+                    var update = Builders<Group>.Update.Set(doc => doc.Listas, found.Listas);
+
+                    UpdateResult result = collection.UpdateOne(filter, update);
+
+                    // Eliminamos la tarea del grupo anterior ya que la movemos
+                    filter = Builders<Group>.Filter.Eq(doc => doc._id, groupWithTask._id);
+                    update = Builders<Group>.Update.Set(doc => doc.Listas, groupWithTask.Listas);
+
+                    collection.UpdateOne(filter, update);
+
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+            }
+        }
+
         public Group AddMemberToGroup(string gname, ObjectId id)
         {
             using (this.db = new MDatabase(this.dbName))
