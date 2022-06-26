@@ -1,0 +1,57 @@
+﻿@using Registro.Models
+@model TareaDB
+
+<script>
+    $(document).ready(function () {
+        $('#gresults > li').on('click', function () {
+            var name = this.textContent
+            console.log(this)
+            console.log(name)
+            $.ajax({
+                url: "/Groups/AddTaskToGroup",
+                type: 'POST',
+                /*
+                 * El id de la tarea lo recibimos en
+                 * this.Session["model"]
+                 * desde la accion del controlador
+                 * lo recibimos **/
+
+                data: {
+                    gname: name
+                },
+                success: function (data) {
+                    $("body").html(data);
+                }
+            })
+        })
+    })
+</script>
+
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="close-btn-wrapper">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <h4 class="create-title">Add to group</h4>
+    </div>
+    <div class="modal-body">
+        <section id="contact">
+            <div class="content">
+                <div id="form">
+                    <ul id="gresults">
+                        @{ 
+                            this.Session["model"] = Model;
+                        }
+                        @foreach(var g in (List<Group>)this.Session["Grupos"])
+                        {
+                            <li>@g.Nombre</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    @*<div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>*@
+</div>
