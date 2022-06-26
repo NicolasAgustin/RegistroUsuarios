@@ -6,6 +6,13 @@ using System.Web.Security;
 using System.Globalization;
 using System.Collections.Generic;
 
+/***
+ * TODO:
+ *  - Modificar la view de taskdetails para que sea un formulario que permita
+ *    modificar los detalles de la tarea (quizas dejar comentarios y archivos adjuntos)
+ *  - Modificar el estilo de las views que quedaron mal
+ *  - Agregar acciones para mover y eliminar tareas de grupos */
+
 namespace Registro.Controllers
 {
     [Authorize]
@@ -18,10 +25,11 @@ namespace Registro.Controllers
         {
             DatabaseService dbservice = new DatabaseService();
 
+            //**
+            // UserProfileSessionData es una clase para llevar la informacion
+            // de la session del usuario */
             UserProfileSessionData session = 
                 (UserProfileSessionData)this.Session["UserProfile"];
-
-            //dbservice.CreateGroup(new Group { Nombre = "Grupo2", Creator = session.UserId });
 
             if (session is null)
                 throw new Exception("Sesion nula.");
@@ -33,7 +41,6 @@ namespace Registro.Controllers
             }
 
             List<TareaDB> tareas = default;
-               //.ObtenerTareasByAsigneeOrOwner(session.UserId);
 
             List<Group> grupos = 
                 dbservice.ObtenerGruposByMember(session.UserId);
@@ -184,6 +191,13 @@ namespace Registro.Controllers
 
             return View("Index", tareas);
 
+        }
+        [HttpGet]
+        public ActionResult _AddToGroup(int index)
+        {
+            List<TareaDB> tareas = (List<TareaDB>)this.Session["Tasks"];
+            TareaDB t = tareas[index];
+            return View(t);
         }
 
         public List<TaskType> GetTaskTypes()

@@ -57,5 +57,23 @@ namespace Registro.Controllers
             return RedirectToAction("Index", "Account");
         }
 
+        [HttpGet]
+        public ActionResult AddTaskToGroup()
+        {
+            return RedirectToAction("Account", "_AddToGroup");
+        }
+
+        [HttpPost]
+        public ActionResult AddTaskToGroup(string gname)
+        {
+            DatabaseService dbservice = new DatabaseService();
+            TareaDB task = (TareaDB)this.Session["model"];
+            if (task is null)
+            {
+                return RedirectToAction("Index", "Account");
+            }
+            Group group = dbservice.AgregarTareaAGrupo(gname, task._id);
+            return RedirectToAction("Index", "Account");
+        }
     }
 }
