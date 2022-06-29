@@ -7,6 +7,7 @@ using MongoDB.Bson;
 
 namespace Registro.Models
 {
+    [Serializable]
     public class TaskType
     {
         public ObjectId _id { get; set; }

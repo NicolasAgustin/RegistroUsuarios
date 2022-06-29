@@ -24,16 +24,16 @@
             });
         });
     </script>
-    
+
     <script>
         $("#showtable").on("click", "#abtnadd", function (event) {
             console.log(event)
-            // detenemos la propagacion para 
+            // detenemos la propagacion para
             // que no se llame al evento del padre
             event.stopPropagation()
-            var taskIndex = this.children[0].getAttribute('id').replace('add','')
+            var taskIndex = this.children[0].getAttribute('id').replace('add', '')
             console.log(taskIndex)
-            
+
             $.ajax({
                 url: "/Account/_AddToGroup",
                 type: 'GET',
@@ -41,6 +41,23 @@
                 success: function (data) {
                     $("#showmodal .modal-dialog").html(data);
                     $("#showmodal").modal("show");
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#showtable").on("click", "#abtnrem", function (event) {
+            // detenemos la propagacion para
+            // que no se llame al evento del padre
+            event.stopPropagation()
+            var taskIndex = this.children[0].getAttribute('id').replace('rem', '')
+
+            $.ajax({
+                url: "/Account/RemoveTaskFromGroup",
+                type: 'POST',
+                data: { index: taskIndex },
+                success: function (data) {
+                    $("body").html(data);
                 }
             });
         });
@@ -113,9 +130,11 @@
             $('tr').mouseenter(function () {
                 var id = this.getAttribute('data-id');
                 $(`#${id}add`).css('visibility', 'visible')
+                $(`#${id}rem`).css('visibility', 'visible')
             }).mouseleave(function () {
                 var id = this.getAttribute('data-id');
                 $(`#${id}add`).css('visibility', 'hidden')
+                $(`#${id}rem`).css('visibility', 'hidden')
             })
         })
     </script>
@@ -199,6 +218,7 @@
         </div>
 
         <div class="table-container">
+            <h1>@ViewBag.gname</h1>
             <div id="tcreate">
                 @*@using (Html.BeginForm("CreateTask", "Account", FormMethod.Get))
                     {*@
@@ -208,17 +228,27 @@
             <table class="rwd-table" id="showtable">
                 <tr>
                     <th></th>
+                    <th></th>
                     <th>Title</th>
                     <th>Estimated time</th>
                     <th>Tracked time</th>
                     <th>Task type</th>
                     <th>Asignee</th>
                 </tr>
+
                 @foreach (var item in Model ?? Enumerable.Empty<TareaDB>())
                 {
+                    // El operador ?? retorna el valor de la izquierda si no es nulo
+                    // en otro caso retorna el valor derecho
                     var index = Model.IndexOf(item);
                     var btnaddId = index + "add";
+                    var btnremId = index + "rem";
                     <tr style="width: 100%" data-id="@index" name="row" id="task">
+                        <td class="btnsec">
+                            <a href="#" id="abtnrem">
+                                <img src="@Url.Content("~/Content/minus.png")" alt="btnimage" id="@btnremId" class="addbtn" />
+                            </a>
+                        </td>
                         <td class="btnsec">
                             <a href="#" id="abtnadd">
                                 <img src="@Url.Content("~/Content/add.png")" alt="btnimage" id="@btnaddId" class="addbtn" />

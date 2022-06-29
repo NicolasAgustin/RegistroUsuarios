@@ -131,5 +131,9 @@ namespace Registro.Models
             return grepo.AddMemberToGroup(gname, id);
         }
 
+        public Group EliminarTareaDeGrupo(string gname, ObjectId id)
+        {
+            return this.grepo.RemoveTaskFromGroup(gname, id);
+        }
     }
 }

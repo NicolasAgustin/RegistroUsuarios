@@ -11,7 +11,8 @@ using System.Collections.Generic;
  *  - Modificar la view de taskdetails para que sea un formulario que permita
  *    modificar los detalles de la tarea (quizas dejar comentarios y archivos adjuntos)
  *  - Modificar el estilo de las views que quedaron mal
- *  - Agregar acciones para mover y eliminar tareas de grupos */
+ *  - Agregar acciones para mover y eliminar tareas de grupos 
+ *  - Sacar las acciones de grupos de este controlador */
 
 namespace Registro.Controllers
 {
@@ -54,6 +55,8 @@ namespace Registro.Controllers
             {
                 currentGroup = grupos[0];
             }
+
+            ViewBag.gname = currentGroup.Nombre;
 
             tareas = dbservice.ObtenerTareasByIds(currentGroup.Listas);
 
@@ -178,20 +181,28 @@ namespace Registro.Controllers
             ModelState.Clear();
             DatabaseService dbservice = new DatabaseService();
             Group found = dbservice.ObtenerGrupoByName(name);
-            List<ObjectId> tareasIds = found.Listas;
-            if (tareasIds is null)
-            {
-                this.Session["Tasks"] = null;
-                return View("Index", null);
-            }
+            this.Session["CurrentGroup"] = found;
 
-            List<TareaDB> tareas = dbservice.ObtenerTareasByIds(tareasIds);
-
-            this.Session["Tasks"] = tareas;
-
-            return View("Index", tareas);
+            return RedirectToAction("Index");
 
         }
+
+        [HttpPost]
+        public ActionResult RemoveTaskFromGroup(int index)
+        {
+            DatabaseService dbservice = new DatabaseService();
+            Group current = (Group)this.Session["CurrentGroup"];
+            List<TareaDB> tareas = (List<TareaDB>)this.Session["Tasks"];
+
+            Group updatedGroup = 
+                dbservice.EliminarTareaDeGrupo(current.Nombre, tareas[index]._id);
+
+            this.Session["CurrentGroup"] = updatedGroup;
+            this.Session["Tasks"] = updatedGroup.Listas;
+
+            return RedirectToAction("Index", "Account");
+        }
+
         [HttpGet]
         public ActionResult _AddToGroup(int index)
         {

@@ -7,6 +7,7 @@ using MongoDB.Bson;
 
 namespace Registro.Models
 {
+    [Serializable]
     public class Tarea
     {
         public ObjectId Owner { set; get; }
@@ -60,7 +61,7 @@ namespace Registro.Models
         }
 
     }
-
+    [Serializable]
     public class TareaDB : Tarea
     {
         public ObjectId _id { get; set; }
