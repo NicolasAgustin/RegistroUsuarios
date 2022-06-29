@@ -67,7 +67,12 @@ namespace Registro.Controllers
         public ActionResult AddTaskToGroup(string gname)
         {
             DatabaseService dbservice = new DatabaseService();
-            TareaDB task = (TareaDB)this.Session["model"];
+            /*
+             * Hacemos una copia del objeto tarea
+             * Si no realizamos una copia, a la hora de 
+             * eliminar una tarea de un grupo, esta se borra
+             * de todos los grupos porque apuntan al mismo objeto **/
+            TareaDB task = Utils.DeepCopy((TareaDB)this.Session["model"]);
             if (task is null)
             {
                 return RedirectToAction("Index", "Account");
