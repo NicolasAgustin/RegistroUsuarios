@@ -169,7 +169,10 @@ namespace Registro.Controllers
             Group currentGroup = (Group)this.Session["CurrentGroup"];
             if (currentGroup != null)
             {
-                dbservice.AgregarTareaAGrupo(currentGroup.Nombre, nid);
+                Group g = 
+                    dbservice.AgregarTareaAGrupo(currentGroup.Nombre, nid);
+
+                this.Session["CurrentGroup"] = g;
             }
 
             return RedirectToAction("Index");
