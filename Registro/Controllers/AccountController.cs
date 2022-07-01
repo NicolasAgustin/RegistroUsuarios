@@ -179,6 +179,24 @@ namespace Registro.Controllers
         }
 
         [HttpPost]
+        public ActionResult UpdateTask(TareaForm t)
+        {
+            DatabaseService dbservice = new DatabaseService();
+            TareaDB task = new TareaDB();
+
+            ObjectId id = (ObjectId)this.TempData["id"];
+
+            task._id = id;
+            task.Asignee = dbservice.ObtenerUsuariosByName(t.Asignee)._id;
+            task.Description = t.Description;
+            task.Title = t.Title;
+
+            dbservice.ActualizarTarea(task);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
         public ActionResult ShowTasksInGroup(string name)
         {
             ModelState.Clear();
