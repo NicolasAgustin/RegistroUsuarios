@@ -39,25 +39,60 @@ namespace Registro.Models
         {
             using (this.db = new MDatabase(this.dbName))
             {
-                //var session = this.db.CreateSession();
-                //session.StartTransaction();
                 try
                 {
                     IMongoCollection<TareaDB> collection = this.db.dbInstance.GetCollection<TareaDB>(collName);
                     t._id = ObjectId.GenerateNewId();
                     collection.InsertOne(t);
-                    //session.CommitTransaction();
                     return t._id;
                 }
                 catch (Exception e)
                 {
                     Debug.WriteLine(e.Message);
-                    //session.AbortTransaction();
                     return default;
                 }
 
             }
         }
+
+        public TareaDB Update(TareaDB tsearch)
+        {
+            using (this.db = new MDatabase(this.dbName))
+            {
+                try
+                {
+                    IMongoCollection<TareaDB> collection = this.db.dbInstance.GetCollection<TareaDB>(collName);
+
+                    TareaDB found =
+                        collection.Find(doc => doc._id == tsearch._id).FirstOrDefault();
+
+                    found.Title = tsearch.Title;
+                    found.Description = tsearch.Description;
+                    // Agregar mas campos para modificar
+
+                    var filter = Builders<TareaDB>.Filter.Eq(doc => doc._id, tsearch._id);
+                    // Por ahora usamos listas para poner las tareas
+                    // En realidad cada grupo puede tener muchas listas de tareas
+                    var update = Builders<TareaDB>.Update.Set(doc => doc.Title, found.Title)
+                                                         .Set(doc => doc.Description, found.Description)
+                                                         .Set(doc => doc.Asignee, found.Asignee)
+                                                         .Set(doc => doc.Owner, found.Owner);
+                    // Para actualizar mas campos, hay que agregar mas Set
+
+
+                    UpdateResult result = collection.UpdateOne(filter, update);
+
+                    return found;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return default;
+                }
+
+            }
+        }
+
         public List<TareaDB> GetAll()
         {
             using (this.db = new MDatabase(this.dbName))

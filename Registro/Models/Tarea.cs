@@ -90,6 +90,7 @@ namespace Registro.Models
         {
             this._id = ObjectId.Empty;
         }
+
     } 
 
     public class TareaForm
