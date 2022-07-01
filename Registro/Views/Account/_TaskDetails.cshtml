@@ -7,61 +7,80 @@
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 
+<script>
+    function loadData(){
+        t1 = document.getElementById("asignee").innerHTML;
+        t2 = document.getElementById("title").innerHTML;
+
+        console.log(t1)
+        console.log(t2)
+
+        document.getElementById("input-asignee").value = t1.trim()
+        document.getElementById("input-title").value = t2.trim()
+    }
+</script>
+
 <div class="modal-content">
     <div class="modal-header">
         <div class="modal-title-wrapper">
             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
-        <h4 class="modal-title create-title">@Html.DisplayFor(model => model.Title)</h4>
+        <h4 class="modal-title create-title" id="title">@Model.Title</h4>
     </div>
     <div class="modal-body">
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Owner)
-            </dt>
+        @using (Html.BeginForm("UpdateTask", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "contactForm", onsubmit = "return loadData()" }))
+        {
+            this.TempData["id"] = Model._id;
 
-            <dd>
-                @Html.Action("GetNameById", "Account", new { id = @Model.Owner })
-            </dd>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </dt>
+                <dd id="owner">
+                    @Html.Action("GetNameById", "Account", new { id = @Model.Owner })
+                </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Asignee)
-            </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Asignee)
+                </dt>
 
-            <dd>
-                @Html.Action("GetNameById", "Account", new { id = @Model.Asignee })
-            </dd>
+                <dd id="asignee">
+                    @Html.Action("GetNameById", "Account", new { id = @Model.Asignee })
+                </dd>
 
-            <dt>
-                Estimated time
-            </dt>
+                <dt>
+                    Estimated time
+                </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.TEstimated)
-            </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.TEstimated)
+                </dd>
 
-            <dt>
-                Time tracked
-            </dt>
+                <dt>
+                    Time tracked
+                </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.TTracked)
-            </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.TTracked)
+                </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Description)
-            </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
 
-            <dd>
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">@Model.Description</textarea>
-                </div>
-            </dd>
 
-        </dl>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <dd>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description">@Model.Description</textarea>
+                    </div>
+                </dd>
+            </dl>
+            <input id="input-asignee" style="display: none" name="asignee" />
+            <input id="input-title" style="display: none" name="title" />
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default">Update</button>
+            </div>
+        }
+
     </div>
 </div>
