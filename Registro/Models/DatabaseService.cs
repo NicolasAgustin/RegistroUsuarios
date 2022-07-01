@@ -28,6 +28,10 @@ namespace Registro.Models
         {
             return this.trepo.Insert(t);
         }
+        public TareaDB ActualizarTarea(TareaDB t)
+        {
+            return this.trepo.Update(t);
+        }
         public TareaDB ObtenerTareaById(ObjectId id)
         {
             return trepo.GetById(id);
